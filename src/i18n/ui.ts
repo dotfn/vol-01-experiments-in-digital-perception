@@ -167,7 +167,7 @@ export const ui = {
     'colophon.03.body.email': 'hello@sonodos.studio',
     'colophon.03.body.link': 'Begin a conversation',
     'footer.01': 'Sonodos Studio — Vol. I',
-    'footer.02': 'Canvas 2D · Spring Physics · 60fps',
+    'footer.02': 'Article',
     'footer.03': 'After Josef Albers · 2026',
   },
   es: {
@@ -333,7 +333,7 @@ export const ui = {
     'colophon.03.body.email': 'hello@sonodos.studio',
     'colophon.03.body.link': 'Iniciar una conversación',
     'footer.01': 'Sonodos Studio — Vol. I',
-    'footer.02': 'Canvas 2D · Física de Resortes · 60fps',
+    'footer.02': 'Articulo',
     'footer.03': 'Después de Josef Albers · 2026',
   },
 } as const;
