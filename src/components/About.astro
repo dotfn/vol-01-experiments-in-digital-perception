@@ -1,0 +1,149 @@
+---
+
+import { useTranslations } from '../i18n/utils';
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<!-- ═══ ABOUT ════════════════════════════════════════════ -->
+<section id="about">
+  <div class="about-a">
+    <h2 class="about-title about-title-inv" set:html={t('about.title')}></h2>
+    <div class="about-body">
+      <p set:html={t('about.body.1')}></p>
+      <p set:html={t('about.body.2')}></p>
+    </div>
+    <div class="about-foot">{t('about.foot')}</div>
+  </div>
+  <div class="about-b">
+    <div class="about-values">
+      <div class="av-item">
+        <span class="av-n">01</span><span>{t('about.value.01.title')}</span>
+      </div>
+      <div class="av-item">
+        <span class="av-n">02</span><span>{t('about.value.02.title')}</span>
+      </div>
+      <div class="av-item">
+        <span class="av-n">03</span><span>{t('about.value.03.title')}</span>
+      </div>
+      <div class="av-item">
+        <span class="av-n">04</span><span>{t('about.value.04.title')}</span>
+      </div>
+    </div>
+    <div class="about-foot-dark">
+      {t('about.foot.dark')}
+    </div>
+  </div>
+</section>
+
+<style>
+  #about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--ink);
+  }
+  .about-a {
+    background: var(--teal);
+    padding: 64px 56px;
+    border-right: 1px solid var(--ink);
+  }
+  .about-b {
+    padding: 64px 56px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .about-title {
+    font-family: var(--f-disp);
+    font-weight: 800;
+    font-size: clamp(22px, 2.8vw, 38px);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+  }
+  .about-title-inv {
+    color: var(--paper);
+  }
+  .about-title-dark {
+    color: var(--ink);
+  }
+  .about-body {
+    font-size: clamp(12px, 1vw, 15px);
+    font-weight: 400;
+    line-height: 1.82;
+    color: rgba(236, 234, 227, 0.6);
+  }
+  .about-body p {
+    margin-bottom: 18px;
+  }
+  .about-body p:last-child {
+    margin-bottom: 0;
+  }
+  .about-body em {
+    color: rgba(236, 234, 227, 0.88);
+    font-style: normal;
+    font-weight: 600;
+  }
+  .about-body-dark {
+    color: var(--mid);
+  }
+  .about-body-dark em {
+    color: var(--ink);
+    font-style: normal;
+    font-weight: 600;
+  }
+  .about-foot {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(236, 234, 227, 0.14);
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(236, 234, 227, 0.35);
+  }
+  .about-foot-dark {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(20, 18, 16, 0.14);
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+  .about-values {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .av-item {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 16px;
+    align-items: start;
+    font-size: clamp(11px, 0.9vw, 13px);
+    font-weight: 400;
+    color: var(--mid);
+    line-height: 1.5;
+  }
+  .av-n {
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    color: var(--lt);
+    padding-top: 3px;
+  }
+    @media (max-width: 900px) {
+
+    #about {
+      grid-template-columns: 1fr;
+    }
+    .about-a {
+      border-right: none;
+      border-bottom: 1px solid var(--ink);
+    }
+  }
+</style>

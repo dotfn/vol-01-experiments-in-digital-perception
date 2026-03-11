@@ -1,0 +1,45 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<!-- ══════════ SECTION DIVIDER ═══════════════════════════════════ -->
+<div class="section-div">
+  <div class="sd-a"><span class="mono" style="color:var(--mid)">{t('divider.section')}</span></div>
+  <div class="sd-b">
+    <span class="sd-big" set:html={t('divider.title')}></span>
+    <span class="mono" style="color:var(--mid)">{t('divider.subtitle')}</span>
+  </div>
+  <div class="sd-c"><span class="mono" style="color:var(--mid)">{t('divider.label')}</span></div>
+</div>
+<style>
+.section-div {
+  width:100%; height:64px;
+  display:grid; grid-template-columns:200px 1fr 200px;
+  border-bottom:1px solid var(--ink);
+  border-top:1px solid var(--ink);
+}
+.sd-a { border-right:1px solid var(--ink); display:flex; align-items:center; padding:0 24px; }
+.sd-b { display:flex; align-items:center; padding:0 48px; gap:32px; border-right:1px solid var(--ink); }
+.sd-c { display:flex; align-items:center; justify-content:flex-end; padding:0 24px; }
+.sd-big {
+  font-family:var(--f-disp); font-size:clamp(16px, 2vw, 24px);
+  font-weight:800; letter-spacing:-.01em; color:var(--ink);
+}
+.sd-big :global(em) { font-weight:400; color:var(--mid); font-style:normal; }
+@media (max-width: 768px) {
+  .section-div {
+    grid-template-columns: 1fr; /* Stack columns on small screens */
+    height: auto;
+    border-bottom: none; /* Adjust borders so they don't double up */
+  }
+  .sd-a, .sd-b, .sd-c {
+    border-right: none;
+    border-bottom: 1px solid var(--ink);
+    padding: 16px 24px;
+    justify-content: center; /* Center content on mobile */
+  }
+}
+</style>

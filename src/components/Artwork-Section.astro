@@ -1,0 +1,511 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section id="artwork-section">
+  <div class="art-sidebar">
+    <div class="art-s-top">
+      <div>
+        <div class="art-index">{t('artwork.fig')}</div>
+        <div class="art-sidebar-title">{t('artwork.title')}</div>
+        <div class="art-sidebar-desc">
+          {t('artwork.desc')}
+        </div>
+      </div>
+      <div class="art-click-hint mono">{t('artwork.selectLayer')}</div>
+    </div>
+    <div class="art-s-bot">
+      <div class="art-layer-list">
+        <div class="art-layer-item" onclick="openPanel(0)">
+          <div class="art-layer-dot" style="background:var(--teal)">
+          </div>{t('artwork.layer.exhibition')}
+        </div>
+        <div class="art-layer-item" onclick="openPanel(1)">
+          <div class="art-layer-dot" style="background:var(--ochre)">
+          </div>{t('artwork.layer.author')}
+        </div>
+        <div class="art-layer-item" onclick="openPanel(2)">
+          <div class="art-layer-dot" style="background:var(--red)">
+          </div>{t('artwork.layer.philosophy')}
+        </div>
+        <div class="art-layer-item" onclick="openPanel(3)">
+          <div class="art-layer-dot" style="background:var(--mid)">
+          </div>{t('artwork.layer.experiments')}
+        </div>
+        <div class="art-layer-item" onclick="openPanel(4)">
+          <div class="art-layer-dot" style="background:var(--ink)"></div>{t('artwork.layer.contact')}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="artwork-canvas-wrap" data-layer-01={t('artwork.layerLabel') + ' 01'} data-layer-02={t('artwork.layerLabel') + ' 02'} data-layer-03={t('artwork.layerLabel') + ' 03'} data-layer-04={t('artwork.layerLabel') + ' 04'} data-layer-05={t('artwork.layerLabel') + ' 05'} data-ambient={t('artwork.ambient')} data-contemplative={t('artwork.contemplative')}>
+    <canvas id="c"></canvas>
+    <div id="sq-ind"></div>
+    <div id="mode-badge">{t('artwork.ambient')}</div>
+  </div>
+
+  <div class="art-sidebar art-sidebar-r">
+    <div class="art-s-top">
+      <div>
+        <div class="art-index">{t('artwork.properties')}</div>
+        <div class="art-sidebar-title" style="margin-bottom:16px">
+          {t('artwork.currentState')}
+        </div>
+        <div class="art-layer-list" id="prop-list">
+          <div class="art-layer-item">
+            <span
+              id="prop-pal"
+              style="font-family:var(--f-mono);font-size:8px;font-weight:300;letter-spacing:.22em;text-transform:uppercase;color:var(--mid)"
+              >{t('artwork.palette')} I</span>
+          </div>
+          <div class="art-layer-item">
+            <span
+              id="prop-mode"
+              style="font-family:var(--f-mono);font-size:8px;font-weight:300;letter-spacing:.22em;text-transform:uppercase;color:var(--mid)"
+              >{t('artwork.ambient')}</span>
+          </div>
+          <div class="art-layer-item">
+            <span
+              id="prop-layers"
+              style="font-family:var(--f-mono);font-size:8px;font-weight:300;letter-spacing:.22em;text-transform:uppercase;color:var(--mid)"
+              >5 {t('artwork.layers')}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="art-s-bot">
+      <div class="art-sidebar-desc">
+        {t('artwork.canvasHint')}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ═══════════════════════════════════════
+   ARTWORK SECTION
+   ═══════════════════════════════════════ */
+  #artwork-section {
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
+    border-bottom: 1px solid var(--ink);
+  }
+  .art-sidebar {
+    border-right: 1px solid var(--ink);
+    display: flex;
+    flex-direction: column;
+  }
+  .art-sidebar-r {
+    border-right: none;
+    border-left: 1px solid var(--ink);
+  }
+  .art-s-top {
+    flex: 1;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--ink);
+  }
+  .art-s-bot {
+    padding: 20px;
+  }
+
+  .art-index {
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 12px;
+  }
+  .art-sidebar-title {
+    font-family: var(--f-disp);
+    font-size: clamp(11px, 0.9vw, 14px);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+    letter-spacing: 0.01em;
+  }
+  .art-sidebar-desc {
+    font-size: clamp(10px, 0.8vw, 12px);
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--mid);
+    margin-top: 12px;
+  }
+  .art-click-hint {
+    font-family: var(--f-mono);
+    font-size: 7.5px;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-top: 8px;
+  }
+
+  .art-layer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .art-layer-item {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(20, 18, 16, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--mid);
+    cursor: none;
+    transition: color 0.25s;
+  }
+  .art-layer-item:last-child {
+    border-bottom: none;
+  }
+  .art-layer-item:hover {
+    color: var(--ink);
+  }
+  .art-layer-dot {
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+    transition: transform 0.25s;
+  }
+  .art-layer-item:hover .art-layer-dot {
+    transform: scale(1.5);
+  }
+
+  #artwork-canvas-wrap {
+    position: relative;
+    overflow: hidden;
+    height: calc(100vh - 88px);
+    max-height: 900px;
+    min-height: 480px;
+    background: #0b0907;
+  }
+  #c {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  #sq-ind {
+    position: absolute;
+    pointer-events: none;
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(236, 234, 227, 0.55);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 5px 10px;
+  }
+  #sq-ind.vis {
+    opacity: 1;
+  }
+  #mode-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(236, 234, 227, 0.24);
+    pointer-events: none;
+    transition: color 2.5s;
+  }
+  #mode-badge.cont {
+    color: rgba(200, 175, 110, 0.5);
+  }
+    @media (max-width: 900px) {
+
+    #artwork-section {
+      grid-template-columns: 1fr;
+    }
+    .art-sidebar {
+      display: none;
+    }
+    #artwork-canvas-wrap {
+      height: calc(100vh - 88px);
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 560px) {
+
+    #artwork-canvas-wrap {
+      height: calc(100svh - 40px);
+      max-height: none;
+    }
+  }
+</style>
+
+<script>
+import { lerp, clamp, ease, lerpH, hsl, Spring } from '../scripts/utils.js';
+
+const PALS = [
+  [[22, 10, 8], [18, 55, 20], [28, 68, 38], [38, 72, 60], [45, 55, 82]],
+  [[208, 22, 7], [212, 72, 17], [208, 66, 34], [198, 56, 57], [185, 46, 79]],
+  [[350, 14, 8], [348, 65, 19], [5, 72, 36], [18, 70, 58], [35, 55, 84]],
+  [[0, 0, 7], [218, 78, 20], [2, 75, 35], [44, 88, 55], [50, 68, 87]],
+  [[148, 14, 7], [140, 52, 17], [110, 44, 33], [82, 52, 55], [60, 50, 79]],
+  [[258, 16, 8], [268, 58, 19], [278, 62, 36], [298, 52, 58], [318, 42, 82]],
+  [[20, 18, 7], [15, 60, 18], [25, 70, 34], [35, 72, 52], [45, 60, 78]],
+];
+const PAL_NAMES = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
+const SZR = [1, .755, .570, .430, .323];
+const UPR = [0, .026, .050, .068, .082];
+
+class Sq {
+  constructor(i) {
+    this.i = i;
+    this.d = i / 4;
+    const p = PALS[0][i], k = .030 + this.d * .028, dm = .900 - this.d * .040;
+    this.xSp = new Spring(0, k, dm);
+    this.ySp = new Spring(0, k, dm);
+    this.scSp = new Spring(1, .018, .930);
+    this.hSp = new Spring(p[0], .010, .876);
+    this.sSp = new Spring(p[1], .010, .876);
+    this.lSp = new Spring(p[2], .010, .876);
+    this.hovSp = new Spring(0, .06, .88);
+    this.rH = 0;
+    this.rL = 0;
+    this.bp = Math.random() * Math.PI * 2;
+    this.br = .00027 + i * .000044 + Math.random() * .000052;
+  }
+  oSz() { return Math.min(Math.min(AW, AH) * .82, 720); }
+  cSz() { return this.oSz() * SZR[this.i]; }
+  upO() { return this.oSz() * UPR[this.i]; }
+  upd(t, mx, my, on) {
+    const bx = Math.sin(t * this.br + this.bp) * (1 + this.d * .9);
+    const by = Math.cos(t * this.br * .72 + this.bp + 1.1) * (.5 + this.d * .5);
+    let px = 0, py = 0;
+    if (on) { const s = 5 + this.d * 22; px = ((mx - AW * .5) / AW) * s; py = ((my - AH * .5) / AH) * s; }
+    this.xSp.to(px + bx);
+    this.ySp.to(-this.upO() + py + by);
+    this.scSp.to(1 + Math.sin(t * this.br * .52 + this.bp + 1.8) * .006);
+    [this.xSp, this.ySp, this.scSp, this.hSp, this.sSp, this.lSp, this.hovSp].forEach(s => s.tick());
+    this.rH *= .973;
+    this.rL *= .973;
+  }
+  setHSL(h, s, l) {
+    const d = h - this.hSp.x;
+    if (d > 180) this.hSp.snap(this.hSp.x + 360);
+    if (d < -180) this.hSp.snap(this.hSp.x - 360);
+    this.hSp.to(h);
+    this.sSp.to(s);
+    this.lSp.to(l);
+  }
+  bounds() {
+    const sz = this.cSz() * this.scSp.x, cx = AW * .5 + this.xSp.x, cy = AH * .5 + this.ySp.x;
+    return { x: cx - sz * .5, y: cy - sz * .5, w: sz, h: sz, cx, cy };
+  }
+  draw() {
+    const sz = this.cSz() * this.scSp.x;
+    const { cx, cy } = this.bounds();
+    const shM = [{ c: 'rgba(0,0,0,.2)', b: 20, o: 3 }, { c: 'rgba(0,0,0,.12)', b: 12, o: 2 }, { c: 'rgba(0,0,0,.06)', b: 6, o: 1 }, null, null];
+    const sh = shM[this.i];
+    if (sh) { ACX.shadowColor = sh.c; ACX.shadowBlur = sh.b; ACX.shadowOffsetY = sh.o; }
+    else { ACX.shadowColor = 'transparent'; ACX.shadowBlur = 0; ACX.shadowOffsetY = 0; }
+    const h = ((this.hSp.x + this.rH) % 360 + 360) % 360, s = clamp(this.sSp.x, 0, 100), l = clamp(this.lSp.x + this.rL, 0, 100);
+    ACX.fillStyle = hsl(h, s, l);
+    ACX.fillRect(cx - sz * .5, cy - sz * .5, sz, sz);
+    ACX.shadowColor = 'transparent';
+    ACX.shadowBlur = 0;
+    ACX.shadowOffsetX = 0;
+    ACX.shadowOffsetY = 0;
+    if (this.hovSp.x > .005) {
+      ACX.strokeStyle = `rgba(236,234,227,${this.hovSp.x * .18})`;
+      ACX.lineWidth = .8;
+      ACX.strokeRect(cx - sz * .5 + .4, cy - sz * .5 + .4, sz - .8, sz - .8);
+    }
+  }
+}
+
+const ACV = document.getElementById('c');
+const ACX = ACV.getContext('2d');
+let AW = 0, AH = 0;
+const resA = () => {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  AW = ACV.offsetWidth;
+  AH = ACV.offsetHeight;
+  ACV.width = AW * dpr;
+  ACV.height = AH * dpr;
+};
+resA();
+let ra;
+window.addEventListener('resize', () => { clearTimeout(ra); ra = setTimeout(resA, 80); });
+
+const SQS = Array.from({ length: 5 }, (_, i) => new Sq(i));
+let pF = 0, pT_ = 0, pT = 1, pW = 0;
+const palProp = document.getElementById('prop-pal');
+const modeProp = document.getElementById('prop-mode');
+
+function advPal() {
+  pF = pT_;
+  const pool = Array.from({ length: PALS.length }, (_, i) => i).filter(i => i !== pF);
+  pT_ = pool[Math.floor(Math.random() * pool.length)];
+  pT = 0;
+  pW = 0;
+  if (palProp) palProp.textContent = `Palette ${PAL_NAMES[pT_]}`;
+}
+function tickPal(dt, fast) {
+  const wd = fast ? 3200 : 9000, td = fast ? 5200 : 12000;
+  if (pT < 1) {
+    pT = Math.min(1, pT + dt / td);
+    const t = ease(pT);
+    SQS.forEach((sq, i) => {
+      const c = lerpH(PALS[pF][i], PALS[pT_][i], t);
+      sq.setHSL(c[0], c[1], c[2]);
+    });
+  } else {
+    pW += dt;
+    if (pW >= wd) advPal();
+  }
+}
+function trigRes(spd) {
+  const str = clamp(spd / 90, .06, 1);
+  SQS.forEach((sq, i) => {
+    setTimeout(() => {
+      sq.rH = clamp(sq.rH + (Math.random() - .5) * str * 24, -30, 30);
+      sq.rL = clamp(sq.rL + (Math.random() - .5) * str * 9, -13, 13);
+    }, i * 140);
+  });
+}
+
+const artWrapEl = document.getElementById('artwork-canvas-wrap');
+const SQ_LABELS = artWrapEl ? [
+  artWrapEl.dataset.layer01 || 'Layer 01',
+  artWrapEl.dataset.layer02 || 'Layer 02',
+  artWrapEl.dataset.layer03 || 'Layer 03',
+  artWrapEl.dataset.layer04 || 'Layer 04',
+  artWrapEl.dataset.layer05 || 'Layer 05',
+] : ['Layer 01', 'Layer 02', 'Layer 03', 'Layer 04', 'Layer 05'];
+const TXT_AMBIENT = artWrapEl?.dataset.ambient || 'Ambient';
+const TXT_CONTEMPLATIVE = artWrapEl?.dataset.contemplative || 'Contemplative';
+let AMX = AW * .5, AMY = AH * .5, aMon = false, aLastMove = 0, aLastMX = 0, aLastMY = 0;
+let aHovSq = -1, CONT = false, resCool = 0, contCyc = 0, bloomA = 0, lastT = 0;
+const modeBadge = document.getElementById('mode-badge');
+const sqInd = document.getElementById('sq-ind');
+const artWrap = document.getElementById('artwork-canvas-wrap');
+
+function hitSq(x, y) {
+  for (let i = 4; i >= 0; i--) {
+    const b = SQS[i].bounds();
+    if (x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h) return i;
+  }
+  return -1;
+}
+function setHov(i) {
+  if (aHovSq === i) return;
+  aHovSq = i;
+  SQS.forEach((s, j) => s.hovSp.to(j === i ? 1 : 0));
+  if (i >= 0) {
+    sqInd.textContent = SQ_LABELS[i];
+    sqInd.classList.add('vis');
+    artWrap.style.cursor = 'none';
+  } else {
+    sqInd.classList.remove('vis');
+  }
+}
+function enterCont() {
+  CONT = true;
+  modeBadge.textContent = TXT_CONTEMPLATIVE;
+  modeBadge.classList.add('cont');
+  if (modeProp) modeProp.textContent = TXT_CONTEMPLATIVE;
+}
+function exitCont() {
+  CONT = false;
+  modeBadge.textContent = TXT_AMBIENT;
+  modeBadge.classList.remove('cont');
+  if (modeProp) modeProp.textContent = TXT_AMBIENT;
+}
+
+const curEl = document.getElementById('cur');
+
+artWrap?.addEventListener('mousemove', e => {
+  const r = ACV.getBoundingClientRect();
+  AMX = e.clientX - r.left;
+  AMY = e.clientY - r.top;
+  aMon = true;
+  aLastMove = performance.now();
+  if (CONT) { exitCont(); trigRes(20); }
+  curEl?.classList.add('big');
+});
+artWrap?.addEventListener('mouseleave', () => { aMon = false; setHov(-1); curEl?.classList.remove('big'); });
+artWrap?.addEventListener('click', e => {
+  const r = ACV.getBoundingClientRect();
+  const sq = hitSq(e.clientX - r.left, e.clientY - r.top);
+  if (sq >= 0) window.openPanel(sq);
+});
+
+function artFrame(t) {
+  requestAnimationFrame(artFrame);
+  const dt = Math.min(t - lastT, 50);
+  lastT = t;
+  if (aMon && !CONT && t - aLastMove > 3500) enterCont();
+  bloomA = lerp(bloomA, CONT ? .6 : 0, .024);
+  if (CONT) { contCyc += dt; if (contCyc > 10000) { contCyc = 0; advPal(); trigRes(55); } }
+  else contCyc = 0;
+  tickPal(dt, CONT);
+  resCool = Math.max(0, resCool - dt);
+  const spd = Math.hypot(AMX - aLastMX, AMY - aLastMY);
+  if (spd > 10 && resCool <= 0) { trigRes(spd); resCool = 700; }
+  aLastMX = AMX;
+  aLastMY = AMY;
+  if (aMon) setHov(hitSq(AMX, AMY));
+  if (aHovSq >= 0) {
+    const b = SQS[aHovSq].bounds();
+    sqInd.style.left = Math.min(b.x + b.w + 8, AW - 170) + 'px';
+    sqInd.style.top = (b.y + 6) + 'px';
+  }
+  SQS.forEach(sq => sq.upd(t, AMX, AMY, aMon));
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  ACX.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ACX.fillStyle = '#0B0907';
+  ACX.fillRect(0, 0, AW, AH);
+  const gv = ACX.createRadialGradient(AW * .5, AH * .5, Math.min(AW, AH) * .1, AW * .5, AH * .5, Math.max(AW, AH) * .82);
+  gv.addColorStop(0, 'rgba(0,0,0,0)');
+  gv.addColorStop(1, 'rgba(0,0,0,.52)');
+  ACX.fillStyle = gv;
+  ACX.fillRect(0, 0, AW, AH);
+  if (bloomA > .004) {
+    const sq = SQS[4], b = sq.bounds(), bh = ((sq.hSp.x) % 360 + 360) % 360;
+    const gb = ACX.createRadialGradient(b.cx, b.cy, sq.cSz() * .04, b.cx, b.cy, sq.cSz() * 1.9);
+    gb.addColorStop(0, hsl(bh, 50, 62, bloomA * .17));
+    gb.addColorStop(1, 'rgba(0,0,0,0)');
+    ACX.fillStyle = gb;
+    ACX.fillRect(0, 0, AW, AH);
+  }
+  SQS.forEach(sq => sq.draw());
+  if (aMon) {
+    const pu = 1 + Math.sin(t * .0026) * .13;
+    ACX.beginPath();
+    ACX.arc(AMX, AMY, 5 * pu, 0, Math.PI * 2);
+    ACX.strokeStyle = 'rgba(236,234,227,.24)';
+    ACX.lineWidth = .7;
+    ACX.stroke();
+    ACX.beginPath();
+    ACX.arc(AMX, AMY, 1.4, 0, Math.PI * 2);
+    ACX.fillStyle = 'rgba(236,234,227,.38)';
+    ACX.fill();
+  }
+}
+requestAnimationFrame(artFrame);
+</script>

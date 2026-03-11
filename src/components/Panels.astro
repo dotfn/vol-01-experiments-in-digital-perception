@@ -1,0 +1,293 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<!-- ─── PANELS ────────────────────────────────────────── -->
+<div>
+  <div id="backdrop"></div>
+
+  <div class="panel" id="panel-0">
+    <div class="p-in">
+      <div class="p-head">
+        <div class="p-tag">{t('panel.layer01.tag')}</div><button
+          class="p-close"
+          data-close="0">×</button>
+      </div>
+      <div class="p-num">01</div>
+      <h2 class="p-title" set:html={t('panel.layer01.title')}></h2>
+      <div class="p-rule"></div>
+      <div class="p-body">
+        <p set:html={t('panel.layer01.body.1')}></p>
+        <p set:html={t('panel.layer01.body.2')}></p>
+        <p set:html={t('panel.layer01.body.3')}></p>
+      </div>
+      <div class="p-foot">{t('panel.layer01.foot')}</div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-1">
+    <div class="p-in">
+      <div class="p-head">
+        <div class="p-tag">{t('panel.layer02.tag')}</div><button
+          class="p-close"
+          data-close="1">×</button>
+      </div>
+      <div class="p-num">02</div>
+      <h2 class="p-title" set:html={t('panel.layer02.title')}></h2>
+      <div class="p-rule"></div>
+      <div class="p-body">
+        <p set:html={t('panel.layer02.body.1')}></p>
+        <p set:html={t('panel.layer02.body.2')}></p>
+        <p set:html={t('panel.layer02.body.3')}></p>
+      </div>
+      <div class="p-foot">{t('panel.layer02.foot')}</div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-2">
+    <div class="p-in">
+      <div class="p-head">
+        <div class="p-tag">{t('panel.layer03.tag')}</div><button
+          class="p-close"
+          data-close="2">×</button>
+      </div>
+      <div class="p-num">03</div>
+      <h2 class="p-title" set:html={t('panel.layer03.title')}></h2>
+      <div class="p-rule"></div>
+      <div class="p-body">
+        <p set:html={t('panel.layer03.body.1')}></p>
+        <p set:html={t('panel.layer03.body.2')}></p>
+        <p set:html={t('panel.layer03.body.3')}></p>
+      </div>
+      <div class="p-foot">{t('panel.layer03.foot')}</div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-3">
+    <div class="p-in">
+      <div class="p-head">
+        <div class="p-tag">{t('panel.layer04.tag')}</div><button
+          class="p-close"
+          data-close="3">×</button>
+      </div>
+      <div class="p-num">04</div>
+      <h2 class="p-title" set:html={t('panel.layer04.title')}></h2>
+      <div class="p-rule"></div>
+      <div class="p-body">
+        <p set:html={t('panel.layer04.body.1')}></p>
+        <p set:html={t('panel.layer04.body.2')}></p>
+        <p set:html={t('panel.layer04.body.3')}></p>
+        <p set:html={t('panel.layer04.body.4')}></p>
+        <p set:html={t('panel.layer04.body.5')}></p>
+      </div>
+      <div class="p-foot">
+        <a href="#experiments" class="p-link" id="go-exh">{t('panel.layer04.foot')}</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-4">
+    <div class="p-in">
+      <div class="p-head">
+        <div class="p-tag">{t('panel.layer05.tag')}</div><button
+          class="p-close"
+          data-close="4">×</button>
+      </div>
+      <div class="p-num">05</div>
+      <h2 class="p-title" set:html={t('panel.layer05.title')}></h2>
+      <div class="p-rule"></div>
+      <div class="p-body">
+        <p set:html={t('panel.layer05.body.1')}></p>
+        <p set:html={t('panel.layer05.body.2')}></p>
+      </div>
+      <div class="p-foot">
+        <a href={`mailto:${t('panel.layer05.foot.email')}`} class="p-link">{t('panel.layer05.foot.email')}</a><br /><a
+          href="#"
+          class="p-link">{t('panel.layer05.foot.link')}</a>
+      </div>
+    </div>
+  </div>
+</div>
+   
+
+<style>
+  /* ═══════════════════════════════════════
+   PANELS
+   ═══════════════════════════════════════ */
+  #backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 190;
+    background: rgba(20, 18, 16, 0.22);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+  }
+  #backdrop.vis {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(500px, 100vw);
+    height: 100vh;
+    background: var(--paper);
+    border-left: 1px solid var(--ink);
+    transform: translateX(100%);
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 200;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .panel::-webkit-scrollbar {
+    display: none;
+  }
+  .panel.open {
+    transform: translateX(0);
+  }
+
+  .p-in {
+    padding: 56px 48px;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .p-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+  }
+  .p-tag {
+    font-family: var(--f-mono);
+    font-size: 8.5px;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+  .p-close {
+    background: none;
+    border: none;
+    color: var(--mid);
+    font-family: var(--f-mono);
+    font-size: 16px;
+    cursor: none;
+    line-height: 1;
+    padding: 2px 6px;
+    transition: color 0.2s;
+  }
+  .p-close:hover {
+    color: var(--ink);
+  }
+  .p-num {
+    font-family: var(--f-disp);
+    font-size: 120px;
+    font-weight: 800;
+    line-height: 0.88;
+    letter-spacing: -0.04em;
+    color: rgba(20, 18, 16, 0.05);
+    margin-bottom: -12px;
+  }
+  .p-title {
+    font-family: var(--f-disp);
+    font-size: clamp(24px, 3vw, 38px);
+    font-weight: 700;
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 32px;
+  }
+  .p-title :global(em) {
+    font-style: normal;
+    font-weight: 400;
+    color: var(--mid);
+  }
+  .p-rule {
+    height: 1px;
+    background: rgba(20, 18, 16, 0.15);
+    margin-bottom: 28px;
+  }
+  .p-body {
+    font-size: clamp(13px, 1vw, 15px);
+    font-weight: 400;
+    line-height: 1.88;
+    color: var(--mid);
+    flex: 1;
+  }
+  .p-body p {
+    margin-bottom: 18px;
+  }
+  .p-body p:last-child {
+    margin-bottom: 0;
+  }
+  .p-body em {
+    color: var(--ink);
+    font-style: normal;
+    font-weight: 600;
+  }
+  .p-foot {
+    margin-top: 44px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(20, 18, 16, 0.12);
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+  .p-link {
+    display: inline-block;
+    margin-top: 12px;
+    font-family: var(--f-mono);
+    font-size: 8.5px;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(20, 18, 16, 0.2);
+    padding-bottom: 2px;
+    transition: border-color 0.2s;
+  }
+  .p-link:hover {
+    border-color: var(--ink);
+  }
+</style>
+
+<script>
+  const bdrop = document.getElementById("backdrop");
+  let activePanel = -1;
+
+  window.openPanel = function (id) {
+    closePanel(true);
+    document.getElementById(`panel-${id}`)?.classList.add("open");
+    bdrop?.classList.add("vis");
+    activePanel = id;
+  };
+
+  function closePanel(s = false) {
+    if (activePanel >= 0)
+      document.getElementById(`panel-${activePanel}`)?.classList.remove("open");
+    if (!s) bdrop?.classList.remove("vis");
+    activePanel = -1;
+  }
+
+  bdrop?.addEventListener("click", () => closePanel());
+  document
+    .querySelectorAll(".p-close")
+    .forEach((b) => b.addEventListener("click", () => closePanel()));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closePanel();
+  });
+  document
+    .getElementById("go-exh")
+    ?.addEventListener("click", () => closePanel());
+</script>

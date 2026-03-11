@@ -1,0 +1,1135 @@
+---
+// src/pages/blog/color-como-evento.astro
+// Entrada editorial — Sonodos Studio
+// Experimentos de Percepción Digital · Vol. I · 2026
+
+const frontmatter = {
+  title: "El Color Como Evento Relacional",
+  description:
+    "Nota de investigación sobre la inestabilidad perceptual del color y su traducción a sistemas digitales interactivos. Experimentos de Percepción Digital, Vol. I, 2026.",
+  pubDate: new Date("2026-03-10"),
+  updatedDate: new Date("2026-03-10"),
+  author: "Sonodos Studio",
+  serie: "Experimentos de Percepción Digital",
+  vol: "I",
+  obra: "Homage to the Square — Variación Digital",
+  tipo: "Nota de investigación / Entrada editorial",
+  tags: [
+    "color",
+    "percepción",
+    "Albers",
+    "interactividad",
+    "Bauhaus",
+    "diseño generativo",
+  ],
+  lang: "es",
+  slug: "color-como-evento-relacional",
+};
+---
+
+<!doctype html>
+<html lang={frontmatter.lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{frontmatter.title} — Archivo · Sonodos Studio</title>
+    <meta name="description" content={frontmatter.description} />
+    <meta name="author" content={frontmatter.author} />
+    <meta property="og:title" content={frontmatter.title} />
+    <meta property="og:description" content={frontmatter.description} />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content={frontmatter.pubDate.toISOString()}
+    />
+    <link rel="canonical" href={`/blog/${frontmatter.slug}`} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=IBM+Plex+Mono:wght@300;400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!--  NAV                                                   -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <nav class="nav">
+      <a href="/" class="nav-home">← Perception Studio</a>
+      <span class="nav-path">blog / {frontmatter.slug}</span>
+      <span class="nav-tag">Nota de Investigación</span>
+      <span class="progress"></span>
+    </nav>
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!--  PAGE                                                  -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <main class="page" id="page-top">
+      <!-- ── MASTHEAD ─────────────────────────────────────── -->
+      <header class="masthead">
+        <div class="masthead-rule"></div>
+
+        <div class="masthead-meta">
+          <span>{frontmatter.author}</span>
+          <span class="dot">·</span>
+          <span>{frontmatter.serie}</span>
+          <span class="dot">·</span>
+          <span>Vol. {frontmatter.vol}</span>
+          <span class="dot">·</span>
+          <time datetime={frontmatter.pubDate.toISOString()}>
+            {frontmatter.pubDate.getFullYear()}
+          </time>
+        </div>
+
+        <div class="title-block">
+          <h1 class="title">El Color Como<br />Evento Relacional</h1>
+          <p class="subtitle">
+            Sobre la inestabilidad perceptual del color y su traducción<br />
+            a sistemas digitales interactivos
+          </p>
+        </div>
+
+        <!-- Metadata grid -->
+        <dl class="meta-grid">
+          <div class="meta-row">
+            <dt class="meta-key">Obra</dt>
+            <dd class="meta-val">{frontmatter.obra}</dd>
+            <dt class="meta-key">Estudio</dt>
+            <dd class="meta-val">{frontmatter.author}</dd>
+          </div>
+          <div class="meta-row">
+            <dt class="meta-key">Serie</dt>
+            <dd class="meta-val">
+              {frontmatter.serie} · Vol. {frontmatter.vol}
+            </dd>
+            <dt class="meta-key">Año</dt>
+            <dd class="meta-val">{frontmatter.pubDate.getFullYear()}</dd>
+          </div>
+          <div class="meta-row">
+            <dt class="meta-key">Tipo</dt>
+            <dd class="meta-val">{frontmatter.tipo}</dd>
+          </div>
+        </dl>
+
+        <!-- Tags -->
+        <div class="tags" role="list" aria-label="Etiquetas">
+          {
+            frontmatter.tags.map((tag) => (
+              <a href={`/blog/tag/${tag}`} class="tag" role="listitem">
+                #{tag}
+              </a>
+            ))
+          }
+        </div>
+
+        <div class="masthead-rule thin"></div>
+      </header>
+
+      <!-- ══════════════════════════════════════════════════ -->
+      <!--  ARTICLE                                           -->
+      <!-- ══════════════════════════════════════════════════ -->
+      <article class="article" aria-label={frontmatter.title}>
+        <!-- ── INTRO ──────────────────────────────────────── -->
+        <section class="intro" aria-label="Introducción">
+          <p>
+            Cuando encontré <em>Interaction of Color</em> de Josef Albers por primera
+            vez, lo que me dejó sin respuesta no fue la complejidad del argumento
+            sino su sencillez: el color no existe de manera absoluta. Lo que vemos
+            no es el color de un objeto, sino el resultado de una negociación permanente
+            entre ese color y todo aquello que lo rodea. La misma muestra de gris
+            parece más fría sobre un fondo cálido, más cálida sobre uno frío. El ojo
+            no mide la longitud de onda; interpreta la diferencia. Albers publicó
+            esto en 1963. Sigo volviendo a esa idea.
+          </p>
+          <p>
+            Esta pieza comenzó como una pregunta: ¿qué ocurre cuando se intenta
+            trasladar esa lógica a un sistema digital interactivo? Cinco
+            cuadrados anidados, proporciones derivadas del método de Albers,
+            paletas construidas a partir de la pedagogía Bauhaus. La intención
+            no era ilustrar la teoría sino ver si era posible activarla: que
+            cada cambio de paleta, cada aproximación del cursor, produjera una
+            lectura distinta del mismo conjunto de relaciones formales.
+          </p>
+          <p>
+            No sé si el resultado es bello, aunque a veces lo parece. Lo que me
+            interesa es otra cosa: ese momento en que quien mira empieza a notar
+            que su percepción está siendo construida, no simplemente recibida.
+          </p>
+        </section>
+
+        <!-- ── § 01 — CONTEXTO TEÓRICO ──────────────────── -->
+        <section class="s" id="s01" aria-labelledby="s01-title">
+          <div class="s-header">
+            <span class="s-n" aria-hidden="true">01</span>
+            <span class="s-rule" aria-hidden="true"></span>
+            <span class="s-label">Contexto Teórico</span>
+          </div>
+          <h2 class="s-title" id="s01-title">
+            El fenómeno del contraste simultáneo
+          </h2>
+
+          <!-- Simultaneous contrast study -->
+          <figure
+            class="fig-contrast"
+            aria-label="Estudio de contraste simultáneo: mismo gris sobre cinco fondos distintos"
+          >
+            <div class="contrast-cells" role="presentation">
+              <div class="cc" style="background:#1E3835">
+                <div class="cc-inner" role="presentation"></div>
+              </div>
+              <div class="cc" style="background:#C49520">
+                <div class="cc-inner" role="presentation"></div>
+              </div>
+              <div class="cc" style="background:#ECEAE3">
+                <div
+                  class="cc-inner"
+                  style="border:1px solid #D8D3CB"
+                  role="presentation"
+                >
+                </div>
+              </div>
+              <div class="cc" style="background:#C03B24">
+                <div class="cc-inner" role="presentation"></div>
+              </div>
+              <div class="cc" style="background:#141210">
+                <div class="cc-inner" role="presentation"></div>
+              </div>
+            </div>
+            <figcaption>
+              Todos los cuadrados centrales comparten el mismo valor: <code
+                >#A09890</code
+              >. La percepción varía en cada contexto cromático.
+            </figcaption>
+          </figure>
+
+          <p>
+            El contraste simultáneo describe algo que no es fácil de aceptar la
+            primera vez que se observa: dos colores adyacentes se modifican
+            mutuamente en la percepción. El sistema visual no procesa los
+            estímulos de manera aislada —cada señal es evaluada en relación con
+            las señales vecinas. Eso tiene base en la inhibición lateral de las
+            células ganglionares de la retina. El resultado son efectos que
+            ningún instrumento de medición puede detectar, pero que el ojo
+            experimenta como hechos completamente reales.
+          </p>
+          <p>
+            Un gris neutro colocado sobre un fondo azul intenso parece
+            ligeramente anaranjado. El mismo gris sobre un fondo naranja parece
+            ligeramente azulado. No creo que sea útil llamar a eso una ilusión
+            —la palabra sugiere un error, una trampa. Lo que ocurre es más
+            interesante: el ojo simplemente no trabaja en términos de colores
+            absolutos. Trabaja en términos de diferencias, de relaciones. Albers
+            llamó a esto «el factor relativo del color», y me parece que todavía
+            no hemos terminado de asimilar lo que eso implica.
+          </p>
+          <p>
+            Lo que me resulta relevante es que este fenómeno no desaparece en
+            los sistemas digitales. Si acaso, parece amplificarse: las pantallas
+            emiten luz directa, sin el comportamiento reflectante de los
+            pigmentos, lo que hace que las interacciones cromáticas sean más
+            inmediatas y, en muchos casos, más difíciles de controlar. Ignorar
+            el contexto cromático al trabajar en pantalla es, en cierta medida,
+            trabajar a ciegas —aunque tampoco tengo certeza de hasta dónde llega
+            esa amplificación respecto al trabajo con pigmentos.
+          </p>
+        </section>
+
+        <!-- ── § 02 — EL SISTEMA DIGITAL ──────────────────── -->
+        <section class="s" id="s02" aria-labelledby="s02-title">
+          <div class="s-header">
+            <span class="s-n" aria-hidden="true">02</span>
+            <span class="s-rule" aria-hidden="true"></span>
+            <span class="s-label">El Sistema Digital</span>
+          </div>
+          <h2 class="s-title" id="s02-title">
+            Capas, campos y observación activa
+          </h2>
+
+          <!-- Nested squares diagram -->
+          <figure
+            class="fig-squares"
+            aria-label="Diagrama de cinco cuadrados concéntricos — figura y fondo simultáneos"
+          >
+            <div class="sq-wrap" role="presentation">
+              <div class="sq sq-0">
+                <div class="sq sq-1">
+                  <div class="sq sq-2">
+                    <div class="sq sq-3">
+                      <div class="sq sq-4"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <figcaption>
+              Cinco cuadrados concéntricos. Cada capa es figura respecto a su
+              contenedor y fondo respecto a su contenido.
+            </figcaption>
+          </figure>
+
+          <p>
+            La estructura que elegí para explorar esto son cinco cuadrados
+            concéntricos, cada uno a la vez figura y fondo: figura respecto al
+            cuadrado que lo contiene, fondo respecto al cuadrado contenido en
+            él. Esa ambigüedad posicional me interesa porque no es decorativa
+            —es la condición que, en teoría, hace posible que cada capa funcione
+            como un campo de color que negocia continuamente con su vecino.
+          </p>
+          <p>
+            El sistema trabaja con siete paletas de referencia, construidas a
+            partir de relaciones cromáticas —no de colores individuales. Elegí
+            esto porque un color solo no dice nada; solo dice algo en relación
+            con otro. Las transiciones entre paletas ocurren por interpolación
+            en espacio HSL con corrección de ángulo, lo que intenta que el
+            recorrido entre dos estados pase por los tonos intermedios
+            perceptualmente más coherentes. No sé si siempre lo consigue, pero
+            la idea era que cada transición fuera parte del experimento, no solo
+            un efecto de paso entre configuraciones.
+          </p>
+          <p>
+            La física de resortes agrega una variable cinética: los cuadrados
+            responden a la proximidad del cursor con un desplazamiento suave,
+            proporcional a la distancia. Ese movimiento altera los anchos
+            relativos de cada capa, modificando las proporciones de los campos
+            de color y, con eso, su influencia mutua. La idea es que quien usa
+            el sistema
+            <em>esté realizando un experimento</em> sin necesariamente saberlo.
+          </p>
+        </section>
+
+        <!-- ── § 03 — EXPERIENCIA DEL ESPECTADOR ──────────── -->
+        <section class="s" id="s03" aria-labelledby="s03-title">
+          <div class="s-header">
+            <span class="s-n" aria-hidden="true">03</span>
+            <span class="s-rule" aria-hidden="true"></span>
+            <span class="s-label">Experiencia del Espectador</span>
+          </div>
+          <h2 class="s-title" id="s03-title">El contemplador como variable</h2>
+          <p>
+            Cuando alguien se acerca a la pieza, lo primero que nota es que el
+            sistema responde. La proximidad del cursor produce desplazamientos
+            suaves en las capas; las proporciones cambian; los campos de color
+            se expanden o contraen. No hay instrucciones escritas. La esperanza
+            es que la lógica se comunique a través de la exploración directa,
+            aunque no siempre es así.
+          </p>
+
+          <!-- State timeline -->
+          <figure
+            class="timeline"
+            aria-label="Estados del sistema según quietud del espectador"
+          >
+            <div class="tl-item">
+              <div
+                class="tl-dot"
+                style="background:var(--ochre)"
+                aria-hidden="true"
+              >
+              </div>
+              <div class="tl-body">
+                <span class="tl-label">0 – 3 s de quietud</span>
+                <span class="tl-desc"
+                  >Modo activo. El cursor es operador. Las capas responden a la
+                  proximidad.</span
+                >
+              </div>
+            </div>
+            <div class="tl-item">
+              <div
+                class="tl-dot"
+                style="background:var(--teal)"
+                aria-hidden="true"
+              >
+              </div>
+              <div class="tl-body">
+                <span class="tl-label">3 s de quietud</span>
+                <span class="tl-desc"
+                  >Umbral contemplativo. El sistema toma autonomía. Ciclo lento
+                  entre paletas.</span
+                >
+              </div>
+            </div>
+            <div class="tl-item">
+              <div
+                class="tl-dot"
+                style="background:var(--red)"
+                aria-hidden="true"
+              >
+              </div>
+              <div class="tl-body">
+                <span class="tl-label">Modo contemplativo</span>
+                <span class="tl-desc"
+                  >Irradiación en la capa central. El color parece expandirse
+                  más allá del borde geométrico.</span
+                >
+              </div>
+            </div>
+            <div class="tl-item">
+              <div
+                class="tl-dot"
+                style="background:var(--ink)"
+                aria-hidden="true"
+              >
+              </div>
+              <div class="tl-body">
+                <span class="tl-label">Cualquier movimiento</span>
+                <span class="tl-desc"
+                  >Interrupción. El control regresa al espectador. El ciclo se
+                  detiene.</span
+                >
+              </div>
+            </div>
+            <figcaption class="tl-caption">
+              El umbral de 3 s lo encontré en lecturas sobre fijación visual
+              deliberada. No tengo certeza de que sea el valor correcto, pero
+              funcionó como punto de partida.
+            </figcaption>
+          </figure>
+
+          <p>
+            Si quien mira permanece quieto durante tres segundos —un umbral que
+            elegí a partir de lecturas sobre la duración mínima de una fijación
+            visual deliberada—, el sistema entra en un modo más autónomo. Las
+            capas comienzan a ciclar entre paletas con un ritmo lento e
+            irregular. En ese estado aparece un leve efecto de irradiación en la
+            capa central: el color interior parece expandirse más allá de sus
+            bordes geométricos. Albers documentó algo parecido como «factores
+            relacionados con la luz». Aquí simplemente ocurre, y no tengo una
+            explicación del todo satisfactoria de por qué.
+          </p>
+          <p>
+            Lo que me parece interesante de ese momento es que quien observa
+            deja de ser operador y pasa a ser testigo. El sistema trabaja solo,
+            pero la presencia sigue siendo parte de la ecuación: cualquier
+            movimiento del cursor interrumpe el ciclo y devuelve el control. La
+            frontera entre <em>contemplación</em> e <em>intervención</em> se vuelve
+            perceptible, aunque no del todo clara.
+          </p>
+        </section>
+
+        <!-- ── § 04 — NOTA DEL AUTOR ────────────────────── -->
+        <section class="s s-dark" id="s04" aria-labelledby="s04-title">
+          <div class="s-header">
+            <span class="s-n" style="color:var(--ochre)" aria-hidden="true"
+              >04</span
+            >
+            <span
+              class="s-rule"
+              style="background:rgba(255,255,255,.12)"
+              aria-hidden="true"></span>
+            <span class="s-label" style="color:rgba(255,255,255,.4)"
+              >Nota del Autor</span
+            >
+          </div>
+          <h2 class="s-title" id="s04-title" style="color:var(--paper)">
+            Sobre la práctica
+          </h2>
+          <p class="on-dark">
+            Suelo trabajar en algún punto entre el diseño, la programación
+            creativa y los sistemas interactivos. Sigo volviendo a preguntas
+            sobre percepción y sobre lo que ocurre cuando alguien interactúa con
+            un sistema que no tiene una función utilitaria clara. No sé si eso
+            es una práctica artística o una práctica de diseño. Probablemente
+            las dos, o ninguna del todo.
+          </p>
+          <p class="on-dark">
+            Esta pieza surgió de una pregunta que no sé si tiene respuesta:
+            ¿puede un sistema digital explorar de manera honesta lo que Albers
+            exploró con papel y pigmento? No ilustrarlo, no citarlo —sino ver si
+            el problema sigue siendo el mismo problema en otro medio. Intenté
+            mantener la misma austeridad que tienen sus estudios: cuadrados,
+            colores, proporciones. Sin efectos que distraigan. No siempre estoy
+            seguro de haberlo logrado, pero esa era la intención.
+          </p>
+          <p class="on-dark">
+            Lo que sigo encontrando difícil —y estimulante— es que la pantalla
+            impone sus propias condiciones perceptuales: la luz emitida, la
+            resolución, la latencia de la respuesta. Esas condiciones no son
+            neutrales respecto al experimento. La pantalla no es una ventana
+            hacia el color; es un material con propiedades específicas que
+            participan en lo que se está observando. Todavía estoy tratando de
+            entender con precisión cómo, y en qué medida eso modifica —o no— lo
+            que Albers encontró.
+          </p>
+        </section>
+
+        <!-- ── § 05 — REFERENCIAS ──────────────────────── -->
+        <section class="s" id="s05" aria-labelledby="s05-title">
+          <div class="s-header">
+            <span class="s-n" aria-hidden="true">05</span>
+            <span class="s-rule" aria-hidden="true"></span>
+            <span class="s-label">Referencias</span>
+          </div>
+          <h2 class="s-title" id="s05-title">Influencias conceptuales</h2>
+
+          <div class="refs">
+            <div class="ref-group">
+              <p class="ref-group-label">Textos primarios</p>
+              <dl class="ref">
+                <dt class="ref-author">Josef Albers</dt>
+                <dd class="ref-title">Interaction of Color</dd>
+                <dd class="ref-data">
+                  Yale University Press, New Haven, 1963. Edición revisada y
+                  ampliada, 2006.
+                </dd>
+              </dl>
+              <dl class="ref">
+                <dt class="ref-author">László Moholy-Nagy</dt>
+                <dd class="ref-title">Vision in Motion</dd>
+                <dd class="ref-data">
+                  Paul Theobald &amp; Co., Chicago, 1947.
+                </dd>
+              </dl>
+              <dl class="ref">
+                <dt class="ref-author">Johannes Itten</dt>
+                <dd class="ref-title">Arte del Color</dd>
+                <dd class="ref-data">Bouret, París, 1961.</dd>
+              </dl>
+            </div>
+
+            <div class="ref-group">
+              <p class="ref-group-label">Contexto científico</p>
+              <dl class="ref">
+                <dt class="ref-author">Ewald Hering</dt>
+                <dd class="ref-title">
+                  Teoría de los colores opuestos e inhibición lateral retinal
+                </dd>
+                <dd class="ref-data">
+                  1872. Base fisiológica del contraste simultáneo.
+                </dd>
+              </dl>
+              <dl class="ref">
+                <dt class="ref-author">Edwin Land</dt>
+                <dd class="ref-title">
+                  Experimentos Retinex sobre constancia del color
+                </dd>
+                <dd class="ref-data">Bell Laboratories, 1977.</dd>
+              </dl>
+            </div>
+
+            <div class="ref-group">
+              <p class="ref-group-label">Pedagogía y método</p>
+              <dl class="ref">
+                <dt class="ref-author">Bauhaus-Archiv, Berlín</dt>
+                <dd class="ref-title">
+                  Documentación del Vorkurs (curso preliminar)
+                </dd>
+                <dd class="ref-data">
+                  Itten, Albers y Moholy-Nagy, 1919–1933.
+                </dd>
+              </dl>
+              <dl class="ref">
+                <dt class="ref-author">Frank Mahnke</dt>
+                <dd class="ref-title">Color, Environment and Human Response</dd>
+                <dd class="ref-data">John Wiley &amp; Sons, 1996.</dd>
+              </dl>
+            </div>
+          </div>
+        </section>
+      </article>
+
+      <!-- ── FOOTER ──────────────────────────────────────── -->
+      <footer class="foot">
+        <div class="foot-rule"></div>
+        <div class="foot-inner">
+          <span
+            >{frontmatter.author} · {frontmatter.serie} · Vol. {frontmatter.vol} ·
+            {frontmatter.pubDate.getFullYear()}</span
+          >
+          <a href="/" class="foot-link">← Volver a la exposición</a>
+        </div>
+      </footer>
+    </main>
+  </body>
+</html>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  STYLES — scoped to this page                         -->
+<!-- ══════════════════════════════════════════════════════ -->
+<style>
+  /* ── DESIGN TOKENS ──────────────────────────────────── */
+  :root {
+    --paper: #eceae3;
+    --ink: #141210;
+    --ochre: #c49520;
+    --red: #c03b24;
+    --teal: #1e3835;
+    --lt: #8a8a8a;
+    --mid: #8a857e;
+    --f-disp: "Syne", sans-serif;
+    --f-mono: "IBM Plex Mono", monospace;
+    --f-body: "EB Garamond", Georgia, serif;
+    --col: 680px;
+    --pad-x: clamp(20px, 5vw, 60px);
+  }
+
+  /* ── RESET ───────────────────────────────────────────── */
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    background-color: #eceae3;
+    background-image: url("/beige-paper.png");
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 18px;
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+  }
+
+  /* ── NAV ─────────────────────────────────────────────── */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    height: 40px;
+    padding: 0 var(--pad-x);
+    background: var(--ink);
+    border-bottom: 1px solid #2a2826;
+  }
+  .nav-home {
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-home:hover {
+    color: var(--paper);
+  }
+  .nav-path {
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: lowercase;
+    color: rgba(236, 234, 227, 0.3);
+  }
+  .nav-tag {
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-align: right;
+    border: 1px solid #2a2826;
+    padding: 2px 8px;
+    justify-self: end;
+  }
+
+  /* ── PAGE ─────────────────────────────────────────────── */
+  .page {
+    max-width: calc(var(--col) + var(--pad-x) * 2);
+    margin: 0 auto;
+    padding: 0 var(--pad-x);
+  }
+
+  @property --progress {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 0%;
+  }
+  .nav::after {
+    content: "";
+    position: absolute;
+    top: 40px;
+    left: 0;
+    height: 2px;
+    width: var(--progress);
+    background: var(--ochre);
+    z-index: 200;
+    transition: width 0.1s linear;
+  }
+
+  /* ── MASTHEAD ─────────────────────────────────────────── */
+  .masthead {
+    padding: 56px 0 0;
+  }
+
+  .masthead-rule {
+    height: 1px;
+    background: var(--ink);
+    margin-bottom: 20px;
+  }
+  .masthead-rule.thin {
+    background: rgba(20, 18, 16, 0.15);
+    margin-top: 32px;
+    margin-bottom: 0;
+  }
+
+  .masthead-meta {
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--mid);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 48px;
+  }
+  .dot {
+    color: var(--lt);
+  }
+
+  .title-block {
+    margin-bottom: 32px;
+  }
+
+  .title {
+    font-family: var(--f-disp);
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 20px;
+  }
+
+  .subtitle {
+    font-family: var(--f-body);
+    font-size: clamp(14px, 1.2vw, 17px);
+    font-style: italic;
+    color: var(--mid);
+    line-height: 1.6;
+  }
+
+  /* Metadata grid */
+  .meta-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 24px;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: baseline;
+  }
+  .meta-key {
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--lt);
+    min-width: 52px;
+  }
+  .meta-val {
+    font-family: var(--f-mono);
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--mid);
+    margin-right: 20px;
+  }
+
+  /* Tags */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .tag {
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: lowercase;
+    color: var(--mid);
+    text-decoration: none;
+    border: 1px solid var(--lt);
+    padding: 3px 10px;
+    transition:
+      color 0.2s,
+      border-color 0.2s;
+  }
+  .tag:hover {
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+
+  /* ── ARTICLE ──────────────────────────────────────────── */
+  .article {
+    padding: 64px 0 0;
+  }
+
+  /* Intro */
+  .intro {
+    margin-bottom: 64px;
+  }
+  .intro p {
+    font-family: var(--f-body);
+    font-size: clamp(16px, 1.2vw, 19px);
+    line-height: 1.85;
+    color: var(--mid);
+    margin-bottom: 1.4em;
+    text-align: justify;
+  }
+  .intro p em {
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  /* Section */
+  .s {
+    margin-bottom: 72px;
+  }
+
+  .s-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .s-n {
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    color: var(--mid);
+    flex-shrink: 0;
+  }
+  .s-rule {
+    height: 1px;
+    background: rgba(20, 18, 16, 0.1);
+    flex: 1;
+  }
+  .s-label {
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--lt);
+  }
+  .s-title {
+    font-family: var(--f-disp);
+    font-size: clamp(18px, 2vw, 26px);
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 28px;
+    letter-spacing: -0.01em;
+  }
+  .s p {
+    font-family: var(--f-body);
+    font-size: clamp(15px, 1.1vw, 17.5px);
+    line-height: 1.85;
+    margin-bottom: 1.4em;
+    text-align: justify;
+  }
+  .s p em {
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  /* Dark section */
+  .s-dark {
+    background: var(--teal);
+    padding: 48px 48px 56px;
+    margin: 72px -48px;
+  }
+  .s-dark .s-title {
+    color: var(--paper);
+  }
+  .on-dark {
+    font-family: var(--f-body);
+    font-size: clamp(15px, 1.1vw, 17.5px);
+    line-height: 1.9;
+    color: rgba(236, 234, 227, 0.65);
+    margin-bottom: 1.4em;
+    text-align: justify;
+  }
+
+  /* ── FIGURE — SIMULTANEOUS CONTRAST ──────────────────── */
+  .fig-contrast {
+    margin: 40px 0;
+    border: 1px solid rgba(20, 18, 16, 0.1);
+  }
+  .contrast-cells {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    height: 80px;
+  }
+  .cc {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgba(20, 18, 16, 0.15);
+  }
+  .cc:last-child {
+    border-right: none;
+  }
+  .cc-inner {
+    width: 18px;
+    height: 18px;
+    background: #a09890;
+  }
+
+  figcaption {
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mid);
+    padding: 10px 16px;
+    border-top: 1px solid rgba(20, 18, 16, 0.1);
+    line-height: 1.7;
+  }
+  figcaption code {
+    font-family: var(--f-mono);
+    font-size: 8px;
+    color: var(--ink);
+    background: rgba(20, 18, 16, 0.06);
+    padding: 1px 5px;
+  }
+
+  /* ── FIGURE — NESTED SQUARES ─────────────────────────── */
+  .fig-squares {
+    margin: 40px 0;
+    border: 1px solid rgba(20, 18, 16, 0.1);
+  }
+  .sq-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    background: var(--paper);
+  }
+  .sq {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .sq-0 {
+    width: 180px;
+    height: 180px;
+    background: var(--teal);
+  }
+  .sq-1 {
+    width: 136px;
+    height: 136px;
+    background: var(--ochre);
+  }
+  .sq-2 {
+    width: 102px;
+    height: 102px;
+    background: var(--paper);
+    border: 1px solid var(--lt);
+  }
+  .sq-3 {
+    width: 76px;
+    height: 76px;
+    background: var(--red);
+  }
+  .sq-4 {
+    width: 56px;
+    height: 56px;
+    background: var(--teal);
+  }
+
+  /* ── TIMELINE ────────────────────────────────────────── */
+  .timeline {
+    margin: 32px 0;
+    border: 1px solid rgba(20, 18, 16, 0.1);
+  }
+  .tl-item {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    border-bottom: 1px solid rgba(20, 18, 16, 0.08);
+    padding: 14px 16px 14px 0;
+  }
+  .tl-item:last-of-type {
+    border-bottom: none;
+  }
+  .tl-dot {
+    width: 8px;
+    height: 8px;
+    margin-top: 4px;
+    margin-left: 16px;
+    flex-shrink: 0;
+  }
+  .tl-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .tl-label {
+    font-family: var(--f-mono);
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .tl-desc {
+    font-family: var(--f-body);
+    font-size: 14px;
+    color: var(--mid);
+    line-height: 1.6;
+  }
+  .tl-caption {
+    border-top: 1px solid rgba(20, 18, 16, 0.1) !important;
+    display: block;
+  }
+
+  /* ── REFERENCES ──────────────────────────────────────── */
+  .refs {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .ref-group-label {
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(20, 18, 16, 0.1);
+  }
+  .ref {
+    padding-left: 16px;
+    border-left: 3px solid var(--lt);
+    margin-bottom: 16px;
+  }
+  .ref-author {
+    font-family: var(--f-disp);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .ref-title {
+    font-family: var(--f-body);
+    font-size: 14px;
+    font-style: italic;
+    color: var(--mid);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .ref-data {
+    font-family: var(--f-mono);
+    font-size: 9px;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    color: var(--lt);
+    display: block;
+  }
+
+  /* ── FOOTER ──────────────────────────────────────────── */
+  .foot {
+    padding: 64px 0 48px;
+  }
+  .foot-rule {
+    height: 2px;
+    background: var(--ink);
+    margin-bottom: 20px;
+  }
+  .foot-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .foot-inner > span {
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+  .foot-link {
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .foot-link:hover {
+    color: var(--ink);
+  }
+
+  /* ── RESPONSIVE ──────────────────────────────────────── */
+  @media (max-width: 700px) {
+    .s-dark {
+      margin: 56px -24px;
+      padding: 36px 24px 44px;
+    }
+    .nav {
+      grid-template-columns: 1fr 1fr;
+    }
+    .nav-path,
+    .nav-tag {
+      display: none;
+    }
+    .meta-row {
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+  @media (max-width: 480px) {
+    .contrast-cells {
+      height: 60px;
+    }
+    .tl-item {
+      grid-template-columns: 32px 1fr;
+    }
+    .foot-inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  /* ── PRINT ───────────────────────────────────────────── */
+  @media print {
+    .nav,
+    .page::before {
+      display: none;
+    }
+    .s-dark {
+      background: #f0f0f0 !important;
+      color: #000 !important;
+    }
+    .on-dark {
+      color: #333 !important;
+    }
+  }
+</style>
+
+<script>
+  const update = () => {
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = Math.min(100, (window.scrollY / docH) * 100);
+    document.documentElement.style.setProperty("--progress", pct + "%");
+  };
+  window.addEventListener("scroll", update, { passive: true });
+  update();
+</script>

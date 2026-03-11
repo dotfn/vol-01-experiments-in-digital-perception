@@ -1,0 +1,104 @@
+---
+import { useTranslations } from '../i18n/utils';
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<!-- ═══ COLOPHON ═════════════════════════════════════════ -->
+<section id="colophon">
+  <div class="col-block">
+    <div class="col-label">{t('colophon.01.label')}</div>
+    <p class="col-body" set:html={t('colophon.01.body')}></p>
+  </div>
+  <div class="col-rule"></div>
+  <div class="col-block">
+    <div class="col-label">{t('colophon.02.label')}</div>
+    <p class="col-body" set:html={t('colophon.02.body')}></p>
+  </div>
+  <div class="col-rule"></div>
+  <div class="col-block">
+    <div class="col-label">{t('colophon.03.label')}</div>
+    <p class="col-body"><a href={`mailto:${t('colophon.03.body.email')}`}>{t('colophon.03.body.email')}</a><br><a href="mailto:hello@sonodos.studio">{t('colophon.03.body.link')}</a></p>
+  </div>
+</section>
+
+<div class="ft">
+  <div class="ft-inner">
+    <span>{t('footer.01')}</span>
+    <span>{t('footer.02')}</span>
+    <span>{t('footer.03')}</span>
+  </div>
+</div>
+
+<style>
+    /* ═══════════════════════════════════════
+   COLOPHON / FOOTER
+   ═══════════════════════════════════════ */
+#colophon {
+  display:grid; grid-template-columns:1fr 1px 1fr 1px 1fr;
+  border-bottom:1px solid var(--ink);
+}
+.col-block { padding:40px 44px; }
+.col-block:first-child { padding-left:40px; }
+.col-rule { background:var(--ink); }
+.col-label {
+  font-family:var(--f-mono); font-size:8px; font-weight:300;
+  letter-spacing:.30em; text-transform:uppercase; color:var(--mid);
+  margin-bottom:16px;
+}
+.col-body {
+  font-size:clamp(12px, 1vw, 14px); font-weight:400; line-height:1.78; color:var(--mid);
+}
+.col-body a { color:var(--ink); text-decoration:none; border-bottom:1px solid rgba(20,18,16,.2); transition:border-color .2s; }
+.col-body a:hover { border-color:var(--ink); }
+
+.ft {
+  height:40px; display:flex; justify-content:space-between; align-items:center;
+  padding:0 0;
+  font-family:var(--f-mono); font-size:8px; font-weight:300;
+  letter-spacing:.25em; text-transform:uppercase; color:var(--mid);
+  border-top:1px solid var(--ink);
+}
+.ft-inner { max-width:100%; padding:0 24px; width:100%; display:flex; justify-content:space-between; }
+  @media (max-width: 900px) {
+
+    #colophon {
+      grid-template-columns: 1fr;
+    }
+    .col-rule {
+      display: none;
+    }
+    .col-block {
+      padding: 32px 24px;
+      border-bottom: 1px solid rgba(20, 18, 16, 0.12);
+    }
+  }
+  @media (max-width: 900px) {
+  #colophon {
+    grid-template-columns: 1fr; /* Colapsa a una sola columna */
+  }
+
+  .col-rule {
+    display: none; /* Oculta las líneas divisorias de 1px */
+  }
+
+  .col-block {
+    padding: 32px 24px;
+    border-bottom: 1px solid rgba(20, 18, 16, 0.12);
+  }
+
+  .col-block:first-child {
+    padding-left: 24px; /* Recupera el padding que habías quitado en desktop */
+  }
+
+  .col-block:last-child {
+    border-bottom: none; /* Evita doble línea con el footer */
+  }
+
+  .ft-inner {
+    flex-direction: column; /* Opcional: apila el footer si los textos son largos */
+    gap: 8px;
+    align-items: flex-start;
+  }
+}
+</style>
