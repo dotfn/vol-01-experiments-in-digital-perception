@@ -110,8 +110,33 @@ const t = useTranslations(lang);
       </div>
     </div>
   </div>
+
+  <div class="art-s-bot">
+    <div class="art-layer-list">
+      <div class="art-layer-item" data-open-panel="0">
+        <div class="art-layer-dot" style="background:var(--teal)"></div>
+        {t('artwork.layer.exhibition')}
+      </div>
+      <div class="art-layer-item" data-open-panel="1">
+        <div class="art-layer-dot" style="background:var(--ochre)"></div>
+        {t('artwork.layer.author')}
+      </div>
+      <div class="art-layer-item" data-open-panel="2">
+        <div class="art-layer-dot" style="background:var(--red)"></div>
+        {t('artwork.layer.philosophy')}
+      </div>
+      <div class="art-layer-item" data-open-panel="3">
+        <div class="art-layer-dot" style="background:var(--mid)"></div>
+        {t('artwork.layer.experiments')}
+      </div>
+      <div class="art-layer-item" data-open-panel="4">
+        <div class="art-layer-dot" style="background:var(--ink)"></div>
+        {t('artwork.layer.contact')}
+      </div>
+    </div>
+  </div>
 </div>
-   
+
 
 <style>
   /* ═══════════════════════════════════════
@@ -260,34 +285,80 @@ const t = useTranslations(lang);
   .p-link:hover {
     border-color: var(--ink);
   }
+  .art-s-bot {
+    padding: 20px;
+  }
+  .art-layer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .art-layer-item {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(20, 18, 16, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--f-mono);
+    text-decoration: underline;
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--mid);
+    cursor: none;
+    transition: color 0.25s;
+  }
+  .art-layer-item:last-child {
+    border-bottom: none;
+  }
+  .art-layer-item:hover {
+    color: var(--ink);
+  }
+  .art-layer-dot {
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+    transition: transform 0.25s;
+  }
+  .art-layer-item:hover .art-layer-dot {
+    transform: scale(1.5);
+  }
 </style>
 
 <script>
-  const bdrop = document.getElementById("backdrop");
-  let activePanel = -1;
+  import { $activePanel } from '../stores/panelStore';
 
-  window.openPanel = function (id) {
-    closePanel(true);
-    document.getElementById(`panel-${id}`)?.classList.add("open");
-    bdrop?.classList.add("vis");
-    activePanel = id;
-  };
+  const bdrop = document.getElementById('backdrop');
 
-  function closePanel(s = false) {
-    if (activePanel >= 0)
-      document.getElementById(`panel-${activePanel}`)?.classList.remove("open");
-    if (!s) bdrop?.classList.remove("vis");
-    activePanel = -1;
+  // ── Reacciona a cambios en el store ──
+  $activePanel.subscribe(id => {
+    // Cerrar todos primero
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('open'));
+
+    if (id >= 0) {
+      document.getElementById(`panel-${id}`)?.classList.add('open');
+      bdrop?.classList.add('vis');
+    } else {
+      bdrop?.classList.remove('vis');
+    }
+  });
+
+  // ── Cerrar: solo escribe -1 al store ──
+  function closePanel() {
+    $activePanel.set(-1);
   }
 
-  bdrop?.addEventListener("click", () => closePanel());
-  document
-    .querySelectorAll(".p-close")
-    .forEach((b) => b.addEventListener("click", () => closePanel()));
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closePanel();
+  // ── Layer list: escribe al store ──
+  document.querySelectorAll<HTMLElement>('[data-open-panel]').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = Number(el.dataset.openPanel);
+      $activePanel.set(id);
+    });
   });
-  document
-    .getElementById("go-exh")
-    ?.addEventListener("click", () => closePanel());
+
+  bdrop?.addEventListener('click', closePanel);
+  document.querySelectorAll('.p-close').forEach(b => b.addEventListener('click', closePanel));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+  document.getElementById('go-exh')?.addEventListener('click', closePanel);
 </script>
