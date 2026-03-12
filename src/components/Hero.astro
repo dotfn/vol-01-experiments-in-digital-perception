@@ -191,6 +191,16 @@ const t = useTranslations(lang);
 .on-red   { color:rgba(236,234,227,.45); }
 .on-lt    { color:rgba(20,18,16,.40); }
 
+/* 1. sq-teal se mueve al hacer hover en field-teal */
+#field-teal:hover .field-sq {
+  transform: translate(-6px, -6px);
+}
+
+/* 2. field-lt cambia color al hacer hover en field-red */
+.h-right:has(#field-red:hover) #field-lt {
+  background: #C8C3BC;
+}
+
 @media (max-width: 900px) {
       #hero {
       grid-template-columns: 1fr;
@@ -208,17 +218,3 @@ const t = useTranslations(lang);
 }
 
 </style>
-
-<script>
-const fieldTeal = document.getElementById('field-teal');
-const fieldRed = document.getElementById('field-red');
-const fieldLt = document.getElementById('field-lt');
-const sqTeal = document.getElementById('sq-teal');
-
-fieldTeal?.addEventListener('mouseenter', () => { sqTeal.style.transform = 'translate(-6px,-6px)'; });
-fieldTeal?.addEventListener('mouseleave', () => { sqTeal.style.transform = ''; });
-
-fieldRed?.addEventListener('mouseenter', () => { fieldLt.style.background = '#C8C3BC'; });
-fieldRed?.addEventListener('mouseleave', () => { fieldLt.style.background = ''; });
-
-</script>
