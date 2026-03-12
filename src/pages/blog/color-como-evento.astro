@@ -1,4 +1,11 @@
 ---
+import ArtCanvas from "../../components/ArtCanvas.astro";
+import Cursor from "../../components/Cursor.astro";
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+
+const t = useTranslations(lang);
 // src/pages/blog/color-como-evento.astro
 // Entrada editorial — Sonodos Studio
 // Experimentos de Percepción Digital · Vol. I · 2026
@@ -52,6 +59,7 @@ const frontmatter = {
     />
   </head>
   <body>
+    <Cursor />
     <!-- ══════════════════════════════════════════════════════ -->
     <!--  NAV                                                   -->
     <!-- ══════════════════════════════════════════════════════ -->
@@ -251,17 +259,7 @@ const frontmatter = {
             class="fig-squares"
             aria-label="Diagrama de cinco cuadrados concéntricos — figura y fondo simultáneos"
           >
-            <div class="sq-wrap" role="presentation">
-              <div class="sq sq-0">
-                <div class="sq sq-1">
-                  <div class="sq sq-2">
-                    <div class="sq sq-3">
-                      <div class="sq sq-4"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ArtCanvas {t} />
             <figcaption>
               Cinco cuadrados concéntricos. Cada capa es figura respecto a su
               contenedor y fondo respecto a su contenido.
