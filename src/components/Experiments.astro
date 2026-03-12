@@ -1,5 +1,4 @@
 ---
-
 import { useTranslations } from '../i18n/utils';
 const { lang = 'en' } = Astro.props;
 const t = useTranslations(lang);
@@ -7,69 +6,26 @@ const t = useTranslations(lang);
 
 <!-- ═══ EXPERIMENTS ══════════════════════════════════════ -->
 <section id="experiments">
-  <div class="exp-col" id="ec1">
-    <div class="exp-canvas-block">
-      <canvas id="exp1"></canvas>
-      <div class="exp-c-label">{t('exp.01.label')}</div>
-    </div>
-    <div class="exp-info">
-      <div>
-        <div class="exp-n">{t('exp.01.num')}</div>
-        <h3 class="exp-title" set:html={t('exp.01.title')}></h3>
-        <p class="exp-desc">
-          {t('exp.01.desc')}
-        </p>
-      </div>
-    </div>
-  </div>
 
-  <div class="exp-col" id="ec2">
-    <div class="exp-canvas-block">
-      <canvas id="exp2"></canvas>
-      <div class="exp-c-label">{t('exp.02.label')}</div>
-    </div>
-    <div class="exp-info">
-      <div>
-        <div class="exp-n">{t('exp.02.num')}</div>
-        <h3 class="exp-title" set:html={t('exp.02.title')}></h3>
-        <p class="exp-desc">
-          {t('exp.02.desc')}
-        </p>
+  {[1, 2, 3, 4].map((n) => {
+    const k = String(n).padStart(2, '0');
+    return (
+      <div class="exp-col" id={`ec${n}`}>
+        <div class="exp-canvas-block">
+          <canvas id={`exp${n}`}></canvas>
+          <div class="exp-c-label">{t(`exp.${k}.label`)}</div>
+        </div>
+        <div class="exp-info">
+          <div>
+            <div class="exp-n">{t(`exp.${k}.num`)}</div>
+            <h3 class="exp-title" set:html={t(`exp.${k}.title`)}></h3>
+            <p class="exp-desc">{t(`exp.${k}.desc`)}</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    );
+  })}
 
-  <div class="exp-col" id="ec3">
-    <div class="exp-canvas-block">
-      <canvas id="exp3"></canvas>
-      <div class="exp-c-label">{t('exp.03.label')}</div>
-    </div>
-    <div class="exp-info">
-      <div>
-        <div class="exp-n">{t('exp.03.num')}</div>
-        <h3 class="exp-title" set:html={t('exp.03.title')}></h3>
-        <p class="exp-desc">
-          {t('exp.03.desc')}
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <div class="exp-col" id="ec4">
-    <div class="exp-canvas-block">
-      <canvas id="exp4"></canvas>
-      <div class="exp-c-label">{t('exp.04.label')}</div>
-    </div>
-    <div class="exp-info">
-      <div>
-        <div class="exp-n">{t('exp.04.num')}</div>
-        <h3 class="exp-title" set:html={t('exp.04.title')}></h3>
-        <p class="exp-desc">
-          {t('exp.04.desc')}
-        </p>
-      </div>
-    </div>
-  </div>
 </section>
 
 <style>
@@ -84,35 +40,26 @@ const t = useTranslations(lang);
     flex-direction: column;
     opacity: 0;
     transform: translateY(20px);
+    /* All transitions defined once — avoids overriding shorthand later */
     transition:
       opacity 1s ease,
-      transform 1s ease;
+      transform 1s ease,
+      background 0.35s ease;
   }
-  .exp-col:last-child {
-    border-right: none;
-  }
-  .exp-col.vis {
-    opacity: 1;
-    transform: none;
-  }
-  .exp-col:nth-child(2) {
-    transition-delay: 0.1s;
-  }
-  .exp-col:nth-child(3) {
-    transition-delay: 0.2s;
-  }
-  .exp-col:nth-child(4) {
-    transition-delay: 0.3s;
-  }
+  .exp-col:last-child { border-right: none; }
+  .exp-col.vis        { opacity: 1; transform: none; }
+
+  .exp-col:nth-child(2) { transition-delay: 0.1s; }
+  .exp-col:nth-child(3) { transition-delay: 0.2s; }
+  .exp-col:nth-child(4) { transition-delay: 0.3s; }
 
   .exp-canvas-block {
     width: 100%;
-    aspect-ratio: 1/1;
+    aspect-ratio: 1 / 1;
     border-bottom: 1px solid var(--ink);
     overflow: hidden;
     position: relative;
-    /* Prevent default scroll while touching canvas on mobile */
-    touch-action: none;
+    touch-action: pan-y;
   }
   .exp-canvas-block canvas {
     display: block;
@@ -156,7 +103,6 @@ const t = useTranslations(lang);
     color: var(--ink);
     margin-bottom: 10px;
   }
-  
   .exp-title :global(em) {
     font-style: normal;
     font-weight: 400;
@@ -168,76 +114,37 @@ const t = useTranslations(lang);
     line-height: 1.72;
     color: var(--mid);
   }
-  /* Hover: invert each experiment's color relationship */
-  .exp-col {
-    transition:
-      background 0.35s ease,
-      opacity 1s ease,
-      transform 1s ease;
-  }
-  .exp-col:nth-child(1):hover {
-    background: var(--teal);
-  }
+
+  /* ── Per-column hover themes ────────────────────────────────────────────── */
+  .exp-col:nth-child(1):hover { background: var(--teal); }
   .exp-col:nth-child(1):hover .exp-title,
-  .exp-col:nth-child(1):hover .exp-desc {
-    color: rgba(236, 234, 227, 0.7);
-  }
-  .exp-col:nth-child(1):hover .exp-n {
-    color: rgba(236, 234, 227, 0.35);
-  }
+  .exp-col:nth-child(1):hover .exp-desc { color: rgba(236, 234, 227, 0.7); }
+  .exp-col:nth-child(1):hover .exp-n    { color: rgba(236, 234, 227, 0.35); }
 
-  .exp-col:nth-child(2):hover {
-    background: var(--ochre);
-  }
-  .exp-col:nth-child(2):hover .exp-title {
-    color: rgba(20, 18, 16, 0.9);
-  }
+  .exp-col:nth-child(2):hover { background: var(--ochre); }
+  .exp-col:nth-child(2):hover .exp-title { color: rgba(20, 18, 16, 0.9); }
   .exp-col:nth-child(2):hover .exp-desc,
-  .exp-col:nth-child(2):hover .exp-n {
-    color: rgba(20, 18, 16, 0.55);
-  }
+  .exp-col:nth-child(2):hover .exp-n     { color: rgba(20, 18, 16, 0.55); }
 
-  .exp-col:nth-child(3):hover {
-    background: var(--ink);
-  }
+  .exp-col:nth-child(3):hover { background: var(--ink); }
   .exp-col:nth-child(3):hover .exp-title,
-  .exp-col:nth-child(3):hover .exp-desc {
-    color: rgba(236, 234, 227, 0.7);
-  }
-  .exp-col:nth-child(3):hover .exp-n {
-    color: rgba(236, 234, 227, 0.35);
-  }
+  .exp-col:nth-child(3):hover .exp-desc { color: rgba(236, 234, 227, 0.7); }
+  .exp-col:nth-child(3):hover .exp-n    { color: rgba(236, 234, 227, 0.35); }
 
-  .exp-col:nth-child(4):hover {
-    background: var(--red);
-  }
-  .exp-col:nth-child(4):hover .exp-title {
-    color: rgba(236, 234, 227, 0.95);
-  }
+  .exp-col:nth-child(4):hover { background: var(--red); }
+  .exp-col:nth-child(4):hover .exp-title { color: rgba(236, 234, 227, 0.95); }
   .exp-col:nth-child(4):hover .exp-desc,
-  .exp-col:nth-child(4):hover .exp-n {
-    color: rgba(236, 234, 227, 0.55);
-  }
-    @media (max-width: 900px) {
+  .exp-col:nth-child(4):hover .exp-n     { color: rgba(236, 234, 227, 0.55); }
 
-    #experiments {
-      grid-template-columns: 1fr 1fr;
-    }
-    .section-div {
-      grid-template-columns: 1fr;
-    }
-    .sd-a,
-    .sd-c {
-      display: none;
-    }
-    .sd-b {
-      border-right: none;
-    }
+  /* ── Responsive ─────────────────────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    #experiments { grid-template-columns: 1fr 1fr; }
+    .section-div { grid-template-columns: 1fr; }
+    .sd-a, .sd-c { display: none; }
+    .sd-b        { border-right: none; }
   }
-    @media (max-width: 560px) {
-    #experiments {
-      grid-template-columns: 1fr;
-    }
+  @media (max-width: 560px) {
+    #experiments { grid-template-columns: 1fr; }
     .exp-col {
       border-right: none;
       border-bottom: 1px solid var(--ink);
@@ -246,332 +153,18 @@ const t = useTranslations(lang);
 </style>
 
 <script>
-import { lerp, clamp, hsl, Spring } from '../scripts/utils.js';
+import { DividedField }        from '../scripts/experiments/DividedField.js';
+import { RepulsionGrid }       from '../scripts/experiments/RepulsionGrid.js';
+import { MondrianSplit }       from '../scripts/experiments/MondrianSplit.js';
+import { StackedSquares }      from '../scripts/experiments/StackedSquares.js';
+import { observeVisibility }   from '../scripts/observeVisibility.js';
 
-/* ─── Shared touch helper ───────────────────────────────────────────────────
-   Returns the first touch position relative to the element's bounding rect.
-   Returns null when there are no active touches.
-──────────────────────────────────────────────────────────────────────────── */
-function getTouchPos(el, touch) {
-  const r = el.getBoundingClientRect();
-  return {
-    x: (touch.clientX - r.left) / r.width,
-    y: (touch.clientY - r.top)  / r.height,
-  };
-}
+// ── Boot experiments ─────────────────────────────────────────────────────────
+new DividedField();
+new RepulsionGrid();
+new MondrianSplit();
+new StackedSquares();
 
-/* ─── Adds paired mouse + touch listeners to a canvas ───────────────────────
-   onMove(normX, normY)  → called while pointer is active
-   onLeave()             → called when pointer leaves / lifts
-   Prevents default on touch so the page doesn't scroll while interacting.
-──────────────────────────────────────────────────────────────────────────── */
-function addPointerListeners(el, onMove, onLeave) {
-  // Mouse
-  el.addEventListener('mousemove', e => {
-    const r = el.getBoundingClientRect();
-    onMove((e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height);
-  });
-  el.addEventListener('mouseleave', onLeave);
-
-  // Touch
-  el.addEventListener('touchstart', e => {
-    e.preventDefault();
-    const p = getTouchPos(el, e.touches[0]);
-    onMove(p.x, p.y);
-  }, { passive: false });
-
-  el.addEventListener('touchmove', e => {
-    e.preventDefault();
-    const p = getTouchPos(el, e.touches[0]);
-    onMove(p.x, p.y);
-  }, { passive: false });
-
-  el.addEventListener('touchend', e => {
-    e.preventDefault();
-    onLeave();
-  }, { passive: false });
-
-  el.addEventListener('touchcancel', e => {
-    e.preventDefault();
-    onLeave();
-  }, { passive: false });
-}
-
-/* ═══ EXP 1 — Divided field ════════════════════════════════════════════════ */
-(() => {
-  const el = document.getElementById('exp1'), cx = el.getContext('2d');
-  let W = 0, H = 0;
-  const rs = () => {
-    const d = Math.min(devicePixelRatio || 1, 2);
-    W = el.offsetWidth; H = el.offsetHeight;
-    el.width = W * d; el.height = H * d;
-  };
-  rs();
-  new ResizeObserver(rs).observe(el);
-
-  let mx = .5, my = .5, tmx = .5, tmy = .5;
-
-  addPointerListeners(
-    el,
-    (nx, ny) => { tmx = nx; tmy = ny; },
-    ()        => { tmx = .5; tmy = .5; }
-  );
-
-  let active = false;
-  new IntersectionObserver(es => { active = es[0].isIntersecting; }, { threshold: .1 }).observe(el);
-
-  let last = 0, drift = 0;
-  function tick(t) {
-    requestAnimationFrame(tick);
-    if (!active) return;
-    const dt = Math.min(t - last, 50);
-    last = t;
-    drift += dt * .000025;
-    mx = lerp(mx, tmx, .05);
-    my = lerp(my, tmy, .05);
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const div = W * (.36 + mx * .28);
-    const hA = (22 + drift * 36 + mx * 18) % 360;
-    const hB = (208 - drift * 24 - mx * 14 + 360) % 360;
-    cx.fillStyle = hsl(hA, 50, 16);
-    cx.fillRect(0, 0, div, H);
-    cx.fillStyle = hsl(hB, 55, 22);
-    cx.fillRect(div, 0, W - div, H);
-    cx.strokeStyle = 'rgba(8,7,6,.8)';
-    cx.lineWidth = 1.5;
-    cx.beginPath();
-    cx.moveTo(div, 0);
-    cx.lineTo(div, H);
-    cx.stroke();
-    const sH = H * .13, sY = (H - sH) * .5;
-    cx.fillStyle = 'hsl(0,0%,50%)';
-    cx.fillRect(W * .12, sY, div - W * .12, sH);
-    cx.fillStyle = 'hsl(0,0%,50%)';
-    cx.fillRect(div, sY, W * .76 - div + W * .12, sH);
-  }
-  requestAnimationFrame(tick);
-})();
-
-/* ═══ EXP 2 — Repulsion grid ═══════════════════════════════════════════════ */
-(() => {
-  const el = document.getElementById('exp2'), cx = el.getContext('2d');
-  let W = 0, H = 0;
-  const C = 8, R = 8;
-  let cells = [];
-
-  const build = () => {
-    const d = Math.min(devicePixelRatio || 1, 2);
-    W = el.offsetWidth; H = el.offsetHeight;
-    el.width = W * d; el.height = H * d;
-    cells = [];
-    const px = W * .1, py = H * .1, gW = W - px * 2, gH = H - py * 2;
-    for (let r = 0; r < R; r++) {
-      for (let c = 0; c < C; c++) {
-        const hx = px + c / (C - 1) * gW, hy = py + r / (R - 1) * gH;
-        cells.push({
-          hx, hy,
-          x: new Spring(hx, .04, .88),
-          y: new Spring(hy, .04, .88),
-          s: new Spring(1, .05, .88)
-        });
-      }
-    }
-  };
-  build();
-  new ResizeObserver(build).observe(el);
-
-  // -999 means "no pointer active" → no repulsion
-  let tmx = -999, tmy = -999, mmx = -999, mmy = -999;
-
-  addPointerListeners(
-    el,
-    (nx, ny) => { tmx = nx * (W || 1); tmy = ny * (H || 1); },
-    ()        => { tmx = -999; tmy = -999; }
-  );
-
-  let active = false;
-  new IntersectionObserver(es => { active = es[0].isIntersecting; }, { threshold: .1 }).observe(el);
-
-  let last = 0, drift = 0;
-  const PH = [22, 208, 350, 0, 148, 258];
-
-  function tick(t) {
-    requestAnimationFrame(tick);
-    if (!active) return;
-    const dt = Math.min(t - last, 50);
-    last = t;
-    drift += dt * .000014;
-    mmx = lerp(mmx, tmx, .08);
-    mmy = lerp(mmy, tmy, .08);
-    cells.forEach((c, i) => {
-      const dist = Math.hypot(mmx - c.hx, mmy - c.hy);
-      const rep = clamp(1 - dist / (Math.min(W, H) * .26), 0, 1);
-      const ang = Math.atan2(c.hy - mmy, c.hx - mmx);
-      const push = rep * rep * Math.min(W, H) * .18;
-      c.x.to(c.hx + Math.cos(ang) * push + Math.sin(drift + i * .7) * 1.2);
-      c.y.to(c.hy + Math.sin(ang) * push + Math.cos(drift + i * .5) * 1.2);
-      c.s.to(1 + rep * .5);
-      c.x.tick(); c.y.tick(); c.s.tick();
-    });
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cx.fillStyle = '#0B0907';
-    cx.fillRect(0, 0, W, H);
-    const sz0 = Math.min(W, H) / (C * 1.9);
-    cells.forEach((c, i) => {
-      const ph = PH[i % PH.length];
-      cx.fillStyle = hsl((ph + drift * 26 + i * 4) % 360, 42 + i % 3 * 7, 16 + i % 4 * 6);
-      const sz = sz0 * c.s.x;
-      cx.fillRect(c.x.x - sz * .5, c.y.x - sz * .5, sz, sz);
-    });
-  }
-  requestAnimationFrame(tick);
-})();
-
-/* ═══ EXP 3 — Mondrian split (fully automatic — no pointer needed) ═════════ */
-(() => {
-  const el = document.getElementById('exp3'), cx = el.getContext('2d');
-  let W = 0, H = 0;
-  const rs = () => {
-    const d = Math.min(devicePixelRatio || 1, 2);
-    W = el.offsetWidth; H = el.offsetHeight;
-    el.width = W * d; el.height = H * d;
-    reset();
-  };
-  const HH = [22, 208, 350, 0, 148, 258, 38, 188];
-  let rects = [], ns = 0, al = 1, phase = 'grow';
-
-  function reset() {
-    rects = [{ x: .02, y: .02, w: .96, h: .96, hi: HH[0], s: 18, l: 12 }];
-    ns = 2200; phase = 'grow'; al = 1;
-  }
-  function split() {
-    if (rects.length > 18) { phase = 'hold'; return; }
-    const cands = rects.filter(r => r.w * W > 44 && r.h * H > 44);
-    if (!cands.length) return;
-    const r = cands[Math.floor(Math.random() * cands.length)];
-    const idx = rects.indexOf(r);
-    const isH = Math.random() < (r.w > r.h ? .6 : .4);
-    const sp = .24 + Math.random() * .52;
-    const nh = HH[Math.floor(Math.random() * HH.length)], nl = 8 + Math.random() * 52, ns2 = 14 + Math.random() * 58;
-    rects.splice(idx, 1,
-      isH
-        ? { x: r.x,           y: r.y,           w: r.w * sp,       h: r.h, hi: r.hi, s: r.s,  l: r.l }
-        : { x: r.x,           y: r.y,           w: r.w,            h: r.h * sp, hi: r.hi, s: r.s,  l: r.l },
-      isH
-        ? { x: r.x + r.w * sp, y: r.y,          w: r.w * (1 - sp), h: r.h, hi: nh,   s: ns2, l: nl }
-        : { x: r.x,            y: r.y + r.h * sp, w: r.w,          h: r.h * (1 - sp), hi: nh, s: ns2, l: nl }
-    );
-  }
-
-  let active = false;
-  new IntersectionObserver(es => { active = es[0].isIntersecting; }, { threshold: .1 }).observe(el);
-
-  let last = 0, el2 = 0;
-  function tick(t) {
-    requestAnimationFrame(tick);
-    if (!active) return;
-    const dt = Math.min(t - last, 50);
-    last = t;
-    el2 += dt;
-    if (phase === 'grow') {
-      if (el2 > ns) { split(); ns = el2 + 900 + Math.random() * 2000; }
-    } else if (phase === 'hold') {
-      if (el2 > ns + 3500) { phase = 'fade'; }
-    } else if (phase === 'fade') {
-      al = Math.max(0, al - .0016 * (dt / 16));
-      if (al <= 0) { reset(); el2 = 0; al = 1; }
-    }
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cx.fillStyle = '#0B0907';
-    cx.fillRect(0, 0, W, H);
-    cx.globalAlpha = al;
-    rects.forEach(r => {
-      cx.fillStyle = hsl(r.hi, r.s, r.l);
-      cx.fillRect(r.x * W + 1, r.y * H + 1, r.w * W - 2, r.h * H - 2);
-    });
-    cx.globalAlpha = 1;
-  }
-  rs();
-  new ResizeObserver(rs).observe(el);
-  requestAnimationFrame(tick);
-})();
-
-/* ═══ EXP 4 — Stacked squares with light ═══════════════════════════════════ */
-(() => {
-  const el = document.getElementById('exp4'), cx = el.getContext('2d');
-  let W = 0, H = 0;
-  const rs = () => {
-    const d = Math.min(devicePixelRatio || 1, 2);
-    W = el.offsetWidth; H = el.offsetHeight;
-    el.width = W * d; el.height = H * d;
-  };
-  rs();
-  new ResizeObserver(rs).observe(el);
-
-  let lx = .5, ly = .42, tlx = .5, tly = .42, mOver = false;
-
-  addPointerListeners(
-    el,
-    (nx, ny) => { tlx = nx; tly = ny; mOver = true; },
-    ()        => { tlx = .5; tly = .42; mOver = false; }
-  );
-
-  let active = false;
-  new IntersectionObserver(es => { active = es[0].isIntersecting; }, { threshold: .1 }).observe(el);
-
-  const SZ = [1, .755, .570, .430, .323];
-  const UP = [0, .026, .050, .068, .082];
-  const BC = [[208, 20, 12], [208, 55, 22], [200, 60, 36], [192, 50, 55], [180, 40, 76]];
-  let last = 0, drift = 0;
-
-  function tick(t) {
-    requestAnimationFrame(tick);
-    if (!active) return;
-    const dt = Math.min(t - last, 50);
-    last = t;
-    drift += dt * .000013;
-    lx = lerp(lx, tlx, .05);
-    ly = lerp(ly, tly, .05);
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cx.fillStyle = '#080705';
-    cx.fillRect(0, 0, W, H);
-    const os = Math.min(W, H) * .84, cwx = W * .5, cwy = H * .5 * 1.04;
-    const lxW = lx * W, lyH = ly * H;
-    for (let i = 0; i < 5; i++) {
-      const sz = os * SZ[i], up = os * UP[i], rx = cwx - sz * .5, ry = cwy - sz * .5 - up;
-      const [bh, bs, bl] = BC[i];
-      const dist = Math.hypot(lxW - cwx, lyH - (cwy - up));
-      const lf = clamp(1 - dist / Math.max(W, H) * .9, .2, 1);
-      const hl = clamp((1 - dist / (Math.min(W, H) * .56)), .0, .48);
-      cx.fillStyle = hsl((bh + drift * 13) % 360, bs, clamp(bl * lf + hl * 25, 0, 93));
-      cx.fillRect(rx, ry, sz, sz);
-      const ang = Math.atan2(lyH - (cwy - up), lxW - cwx);
-      const g = cx.createLinearGradient(
-        cwx + Math.cos(ang) * sz * .5, cwy - up + Math.sin(ang) * sz * .5,
-        cwx - Math.cos(ang) * sz * .5, cwy - up - Math.sin(ang) * sz * .5
-      );
-      g.addColorStop(0, `rgba(255,245,235,${hl * .15})`);
-      g.addColorStop(.5, 'rgba(0,0,0,0)');
-      g.addColorStop(1, `rgba(0,0,0,${.14 * (1 - lf)})`);
-      cx.fillStyle = g;
-      cx.fillRect(rx, ry, sz, sz);
-    }
-    if (mOver) {
-      cx.beginPath();
-      cx.arc(lxW, lyH, 2.5, 0, Math.PI * 2);
-      cx.fillStyle = 'rgba(255,248,225,.18)';
-      cx.fill();
-      const gl = cx.createRadialGradient(lxW, lyH, 0, lxW, lyH, os * .48);
-      gl.addColorStop(0, 'rgba(255,248,225,.05)');
-      gl.addColorStop(1, 'rgba(0,0,0,0)');
-      cx.fillStyle = gl;
-      cx.fillRect(0, 0, W, H);
-    }
-  }
-  requestAnimationFrame(tick);
-})();
+// ── Scroll-in animation for the grid columns ─────────────────────────────────
+observeVisibility('#experiments, .exp-col');
 </script>
