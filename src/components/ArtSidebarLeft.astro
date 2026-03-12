@@ -1,0 +1,73 @@
+---
+import Panels from './Panels.astro';
+
+interface Props {
+  t: (key: string) => string;
+}
+const { t } = Astro.props;
+---
+
+<div class="art-sidebar">
+  <div class="art-s-top">
+    <div>
+      <div class="art-index">{t('artwork.fig')}</div>
+      <div class="art-sidebar-title">{t('artwork.title')}</div>
+      <div class="art-sidebar-desc">{t('artwork.desc')}</div>
+    </div>
+    <div class="art-click-hint mono">{t('artwork.selectLayer')}</div>
+    <Panels t={t} />
+  </div>
+
+  
+</div>
+
+<style>
+  .art-sidebar {
+    border-right: 1px solid var(--ink);
+    display: flex;
+    flex-direction: column;
+  }
+  .art-s-top {
+    flex: 1;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .art-index {
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 12px;
+  }
+  .art-sidebar-title {
+    font-family: var(--f-disp);
+    font-size: clamp(11px, 0.9vw, 14px);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+    letter-spacing: 0.01em;
+  }
+  .art-sidebar-desc {
+    font-size: clamp(10px, 0.8vw, 12px);
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--mid);
+    margin-top: 12px;
+  }
+  .art-click-hint {
+    font-family: var(--f-mono);
+    font-size: 7.5px;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-top: 8px;
+  }
+
+</style>

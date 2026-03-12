@@ -1,0 +1,152 @@
+---
+interface Props {
+  t: (key: string) => string;
+}
+const { t } = Astro.props;
+---
+
+<div
+  id="artwork-canvas-wrap"
+  data-layer-01={t('artwork.layerLabel') + ' 01'}
+  data-layer-02={t('artwork.layerLabel') + ' 02'}
+  data-layer-03={t('artwork.layerLabel') + ' 03'}
+  data-layer-04={t('artwork.layerLabel') + ' 04'}
+  data-layer-05={t('artwork.layerLabel') + ' 05'}
+  data-ambient={t('artwork.ambient')}
+  data-contemplative={t('artwork.contemplative')}
+>
+  <canvas id="c"></canvas>
+  <div id="sq-ind"></div>
+  <div id="mode-badge">{t('artwork.ambient')}</div>
+</div>
+
+<style>
+  #artwork-canvas-wrap {
+    position: relative;
+    overflow: hidden;
+    height: calc(100vh - 88px);
+    max-height: 900px;
+    min-height: 480px;
+    background: #0b0907;
+  }
+  #c {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  #sq-ind {
+    position: absolute;
+    pointer-events: none;
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(236, 234, 227, 0.55);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 5px 10px;
+  }
+  #sq-ind.vis {
+    opacity: 1;
+  }
+  #mode-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-family: var(--f-mono);
+    font-size: 8px;
+    font-weight: 300;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(236, 234, 227, 0.24);
+    pointer-events: none;
+    transition: color 2.5s;
+  }
+  #mode-badge.cont {
+    color: rgba(200, 175, 110, 0.5);
+  }
+
+  @media (max-width: 900px) {
+    #artwork-canvas-wrap {
+      height: calc(100vh - 88px);
+      max-height: none;
+    }
+  }
+  @media (max-width: 560px) {
+    #artwork-canvas-wrap {
+      height: calc(100svh - 40px);
+      max-height: none;
+    }
+  }
+</style>
+
+<script>
+import { ArtworkController } from '../scripts/artwork/ArtworkController.js';
+import { $activePanel }      from '../stores/panelStore';
+
+// ── DOM refs ────────────────────────────────────────────────────────────────
+const wrapEl    = document.getElementById('artwork-canvas-wrap') as HTMLElement;
+const canvasEl  = document.getElementById('c')                   as HTMLCanvasElement;
+const sqInd     = document.getElementById('sq-ind')              as HTMLElement;
+const modeBadge = document.getElementById('mode-badge')          as HTMLElement;
+const curEl     = document.getElementById('cur');
+
+// ── i18n labels from data attributes ────────────────────────────────────────
+const labels = {
+  layers: [
+    wrapEl.dataset.layer01 ?? 'Layer 01',
+    wrapEl.dataset.layer02 ?? 'Layer 02',
+    wrapEl.dataset.layer03 ?? 'Layer 03',
+    wrapEl.dataset.layer04 ?? 'Layer 04',
+    wrapEl.dataset.layer05 ?? 'Layer 05',
+  ],
+  ambient:       wrapEl.dataset.ambient       ?? 'Ambient',
+  contemplative: wrapEl.dataset.contemplative ?? 'Contemplative',
+};
+
+// ── Prop elements (optional external UI, e.g. a sidebar) ────────────────────
+const palProp  = document.getElementById('prop-pal');
+const modeProp = document.getElementById('prop-mode');
+
+// ── Wire up the controller ───────────────────────────────────────────────────
+new ArtworkController({
+  canvas: canvasEl,
+  wrapEl,
+  labels,
+
+  onPaletteChange(name) {
+    if (palProp) palProp.textContent = name;
+  },
+
+  onModeChange(label) {
+    const isContemplative = label === labels.contemplative;
+    modeBadge.textContent = label;
+    modeBadge.classList.toggle('cont', isContemplative);
+    if (modeProp) modeProp.textContent = label;
+  },
+
+  onHoverChange(layerIndex, label) {
+    sqInd.textContent = label;
+    sqInd.classList.add('vis');
+  },
+
+  onHoverLeave() {
+    sqInd.classList.remove('vis');
+  },
+
+  onLayerClick(layerIndex) {
+    $activePanel.set(layerIndex);
+  },
+
+  onCursorEnter() {
+    curEl?.classList.add('big');
+  },
+
+  onCursorLeave() {
+    curEl?.classList.remove('big');
+  },
+});
+</script>
