@@ -1,0 +1,121 @@
+---
+---
+
+<div id="cur"></div>
+
+<style>
+  /* ─── Cursor ─────────────────────────────── */
+  #cur {
+    position: fixed;
+    z-index: 9000;
+    width: 8px;
+    height: 8px;
+    background: var(--ink);
+    pointer-events: none;
+    transform: translate(-4px, -4px);
+    transition:
+      width 0.18s ease,
+      height 0.18s ease,
+      background 0.18s ease;
+    mix-blend-mode: multiply;
+  }
+  #cur::before,
+  #cur::after {
+    content: "";
+    position: absolute;
+    background: var(--ink);
+  }
+  #cur::before {
+    width: 1px;
+    height: 18px;
+    top: -5px;
+    left: 3.5px;
+  }
+  #cur::after {
+    width: 18px;
+    height: 1px;
+    left: -5px;
+    top: 3.5px;
+  }
+  #cur.big {
+    width: 24px;
+    height: 24px;
+    /* OJO: Este transform es sobrescrito por el JavaScript */
+    transform: translate(-12px, -12px); 
+    background: transparent;
+    border: 1px solid var(--ink);
+  }
+  #cur.big::before {
+    top: -6px;
+    left: 11.5px;
+  }
+  #cur.big::after {
+    left: -6px;
+    top: 11.5px;
+  }
+  .inv #cur,
+  .inv #cur::before,
+  .inv #cur::after {
+    background: var(--paper);
+  }
+  .inv #cur.big {
+    border-color: var(--paper);
+    background: transparent;
+  }
+    @media (max-width: 900px) {
+        #cur {
+        display: none;
+        }
+    }
+</style>
+
+<script>
+  import { lerp } from "../scripts/utils.js";
+
+
+  const curEl = document.getElementById("cur") as HTMLDivElement | null;
+
+  // Tipamos las coordenadas como números
+  let cx0: number = 0,
+      cy0: number = 0,
+      ctX: number = 0,
+      ctY: number = 0;
+
+  // Tipamos el evento del mouse
+  document.addEventListener("mousemove", (e: MouseEvent) => {
+    ctX = e.clientX;
+    ctY = e.clientY;
+  });
+
+  (function curLoop(): void {
+    requestAnimationFrame(curLoop);
+    
+    // Cláusula de guarda por si el elemento no existe en el DOM
+    if (!curEl) return; 
+
+    cx0 = lerp(cx0, ctX, 0.14);
+    // CORRECCIÓN: En tu código original estaba lerp(ctY, cy0, 0.14). 
+    // Lo invertí para respetar la lógica de (inicio, fin, factor).
+    cy0 = lerp(cy0, ctY, 0.14); 
+
+    curEl.style.transform = `translate(${cx0 - 4}px, ${cy0 - 4}px)`;
+  })();
+
+  function initCursor(): void {
+    if (!curEl) return;
+
+    // Tipamos la lista de elementos para tener autocompletado en el forEach
+    const elements = document.querySelectorAll<HTMLElement>(
+      "a, button, .art-layer-item, .exp-col, .ps-cell, .art-layer-dot"
+    );
+
+    elements.forEach((el: HTMLElement) => {
+      el.addEventListener("mouseenter", () => curEl.classList.add("big"));
+      el.addEventListener("mouseleave", () => curEl.classList.remove("big"));
+    });
+  }
+
+  initCursor();
+
+  document.addEventListener("astro:page-load", initCursor);
+</script>

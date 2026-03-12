@@ -1,4 +1,5 @@
 ---
+import Cursor from "../components/Cursor.astro";
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
 
 const lang = getLangFromUrl(Astro.url);
@@ -27,7 +28,7 @@ const site = "https://sonodos.studio";
     />
   </head>
   <body>
-    <div id="cur"></div>
+    <Cursor />
     <slot />
   </body>
 </html>
@@ -67,63 +68,6 @@ const site = "https://sonodos.studio";
     overflow-x: hidden;
   }
 
-  /* ─── Cursor ─────────────────────────────── */
-  #cur {
-    position: fixed;
-    z-index: 9000;
-    width: 8px;
-    height: 8px;
-    background: var(--ink);
-    pointer-events: none;
-    transform: translate(-4px, -4px);
-    transition:
-      width 0.18s ease,
-      height 0.18s ease,
-      background 0.18s ease;
-    mix-blend-mode: multiply;
-  }
-  #cur::before,
-  #cur::after {
-    content: "";
-    position: absolute;
-    background: var(--ink);
-  }
-  #cur::before {
-    width: 1px;
-    height: 18px;
-    top: -5px;
-    left: 3.5px;
-  }
-  #cur::after {
-    width: 18px;
-    height: 1px;
-    left: -5px;
-    top: 3.5px;
-  }
-  #cur.big {
-    width: 24px;
-    height: 24px;
-    transform: translate(-12px, -12px);
-    background: transparent;
-    border: 1px solid var(--ink);
-  }
-  #cur.big::before {
-    top: -6px;
-    left: 11.5px;
-  }
-  #cur.big::after {
-    left: -6px;
-    top: 11.5px;
-  }
-  .inv #cur,
-  .inv #cur::before,
-  .inv #cur::after {
-    background: var(--paper);
-  }
-  .inv #cur.big {
-    border-color: var(--paper);
-    background: transparent;
-  }
 
   /* ─── Shared helpers ─────────────────────── */
   .mono {
@@ -143,77 +87,13 @@ const site = "https://sonodos.studio";
     width: 1px;
     background: var(--ink);
   }
-  /* ═══ RESPONSIVE ═════════════════════════ */
+  canvas {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  
+}
 </style>
-<script>
-  import { lerp } from "../scripts/utils.js";
 
-  const curEl = document.getElementById("cur");
-  let cx0 = 0,
-    cy0 = 0,
-    ctX = 0,
-    ctY = 0;
-  document.addEventListener("mousemove", (e) => {
-    ctX = e.clientX;
-    ctY = e.clientY;
-  });
-  (function curLoop() {
-    requestAnimationFrame(curLoop);
-    cx0 = lerp(cx0, ctX, 0.14);
-    cy0 = lerp(ctY, cy0, 0.14);
-    curEl.style.transform = `translate(${cx0 - 4}px,${cy0 - 4}px)`;
-  })();
 
-  function initCursor() {
-    document
-      .querySelectorAll(
-        "a,button,.art-layer-item,.exp-col,.ps-cell,.art-layer-dot",
-      )
-      .forEach((el) => {
-        el.addEventListener("mouseenter", () => curEl.classList.add("big"));
-        el.addEventListener("mouseleave", () => curEl.classList.remove("big"));
-      });
-  }
-
-  initCursor();
-
-  document.addEventListener("astro:page-load", initCursor);
-</script>
-
-<script>
-  new IntersectionObserver(
-    (es) =>
-      es.forEach((e) => {
-        if (e.isIntersecting) e.target.classList.add("vis");
-      }),
-    { threshold: 0.08 },
-  ).observe(document.querySelector("#experiments"));
-
-  document.querySelectorAll(".exp-col").forEach((c) => {
-    new IntersectionObserver(
-      (es) => {
-        if (es[0].isIntersecting) c.classList.add("vis");
-      },
-      { threshold: 0.08 },
-    ).observe(c);
-  });
-
-  document.addEventListener("astro:page-load", () => {
-    new IntersectionObserver(
-      (es) =>
-        es.forEach((e) => {
-          if (e.isIntersecting) e.target.classList.add("vis");
-        }),
-      { threshold: 0.08 },
-    ).observe(document.querySelector("#experiments"));
-
-    document.querySelectorAll(".exp-col").forEach((c) => {
-      new IntersectionObserver(
-        (es) => {
-          if (es[0].isIntersecting) c.classList.add("vis");
-        },
-        { threshold: 0.08 },
-      ).observe(c);
-    });
-  });
-</script>
